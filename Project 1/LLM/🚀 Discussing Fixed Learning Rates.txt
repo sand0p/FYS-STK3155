@@ -1,0 +1,71 @@
+[Bruker]
+
+I need some ideas on what I could discuss around fixed learning rates in gradient descent. Here is what I have written so far:
+
+\begin{table}[H]
+    \centering
+    { \setlength{\tabcolsep}{10pt} \setlength{\extrarowheight}{2pt}
+        \begin{tabular}{c|c|c}
+            Learning rate & OLS &Ridge\\
+             \hline
+            0.05 & 0.7750 & 0.7745 \\
+            0.1 & 0.8055 & 0.8047 \\
+            0.15 & 0.8169 & 0.8159 \\
+            0.17 & $-7.97\cdot 10^{14}$ & $-8.52 \cdot 10^{14}$ \\
+        \end{tabular}
+    }
+    \caption{$R^2$ score for given fixed learning rates, for OLS and Ridge regression (degree $12$, $\lambda=10^{-4}$)}
+    \label{tab:Fixed_learning_rates}
+\end{table}
+
+The issue with fixed learning rates is illustrated in table \ref{tab:Fixed_learning_rates}. We see that there is a trend towards better fits with higher learning rates, but picking a learning rate too high will cause the gradient descent method to diverge. As the learning rate is fixed, the rates which are ideal for this specific hyperparameter and polynomial degree might be far from ideal for different degrees and parameters. 
+
+
+
+
+[GPT]
+
+Great start. Your table nicely shows the speed–stability trade-off of fixed learning rates. Here are ideas you can add to deepen the discussion, both theoretically and practically, plus a short paragraph you can drop into your report.
+
+What fixed learning rate guarantees for least-squares problems
+- Quadratic structure: For OLS and Ridge with loss f(w) = (1/2n)||Xw − y||^2 + (λ/2)||w||^2, the Hessian is H = (1/n) X^T X + λ I (symmetric positive definite).
+- Convergence condition: Gradient descent with a fixed step α converges for any initialization iff 0 < α < 2 / λ_max(H). Equivalently, α must be smaller than twice the reciprocal of the largest eigenvalue of H.
+- Rate and optimal fixed α: Let m = λ_min(H) and L = λ_max(H), and κ = L/m be the condition number. The optimal fixed step for quadratics is α* = 2 / (L + m), with linear convergence rate factor ((κ − 1)/(κ + 1)) per iteration. As κ grows, convergence becomes slower and the “safe” α shrinks.
+
+What Ridge changes and why your table behaves as it does
+- Ridge shifts the spectrum of H by λ: both m and L increase by λ, which reduces κ and improves the convergence rate for a given safe α. However, the strict upper bound 2/L can become slightly smaller because L increases.
+- With a tiny λ = 1e−4 and high-degree polynomial features (degree 12), X^T X is typically very ill-conditioned, so κ is huge and 2/L is very small. That’s why both OLS and Ridge tolerate similar maximum α in your table and both blow up at 0.17.
+- If you increase λ meaningfully, you should see a wider stability margin (easier tuning) and fewer iterations for the same tolerance, even if the theoretical α upper bound changes little.
+
+Oscillations, overshoot, and catastrophic divergence
+- Mode-wise behavior: Along an eigenvector of H with eigenvalue μ, the error contracts by a factor |1 − α μ| each step. If α μ ∈ (0, 2), that component converges; if α μ ∈ (1, 2), it flips sign each step (oscillatory convergence). If α μ ≥ 2 for any mode, the iteration diverges.
+- What your negative R^2 means: The huge negative R^2 at α = 0.17 signals divergence and numerical overflow in the parameters and predictions. In practice, monitor the training loss and stop if it increases for several iterations; also consider gradient clipping or a max-norm constraint on parameters to avoid catastrophic blow-up during sweeps.
+
+Why higher α looked “better” up to a point
+- With a fixed iteration budget, larger α moves you toward the optimum faster initially, improving R^2 early—until you cross the stability boundary and explode.
+- If α is close to the upper bound, you may see oscillations that slow or stall fine convergence even if the method is technically stable.
+
+Practical ways to choose or stabilize a fixed learning rate
+- Scale/precondition the data:
+  - Standardize features (zero mean, unit variance) before forming polynomial features; also consider rescaling after expansion.
+  - Use orthogonal polynomial bases (e.g., Legendre, Chebyshev) instead of raw monomials to improve conditioning dramatically.
+- Estimate a safe α from spectral information:
+  - For the loss above, L = λ_max(H) = σ_max(X)^2 / n + λ. A quick power iteration on X (or H via Hessian–vector products) gives an estimate of σ_max(X) and thus a conservative α ≈ 1/L or a more aggressive α ≈ 2/(L + m) if you also estimate m.
+- Use simple line search:
+  - Backtracking with an Armijo condition picks a stable α per iteration and guarantees monotone decrease of the loss, avoiding manual tuning and divergence.
+- Employ learning-rate schedules:
+  - If using stochastic/minibatch GD, a fixed α converges only to a neighborhood; decay schedules (e.g., α_t = α0 / (1 + k t) or exponential decay) are standard.
+- Increase λ when using high-degree polynomials:
+  - Stronger regularization improves conditioning (reduces κ), making fixed α more robust and speeding convergence for the same α.
+
+Suggested additional experiments/plots
+- Plot training loss vs. iterations for several α values to show fast progress, oscillations near the boundary, and divergence beyond it.
+- Vary λ on a grid and show how the maximum stable α and the iteration count to reach a target loss change with λ (illustrating the conditioning effect of Ridge).
+- Estimate L via power iteration and overlay the theoretical stability limit α < 2/L on your empirical sweep.
+- Compare standardized vs. unstandardized features and orthogonal vs. monomial bases at the same α.
+
+Optional aside: alternatives to plain GD
+- For these convex quadratic problems, conjugate gradients or direct solvers via SVD/QR are often far more efficient and don’t require step-size tuning. This can be a useful baseline to mention.
+
+Drop-in paragraph you can adapt
+- Because the least-squares objective is quadratic, gradient descent with a fixed learning rate α has a sharp stability boundary determined by the spectrum of the Hessian H = (1/n) X^T X + λ I. The method converges linearly for any initialization if and only if 0 < α < 2/λ_max(H); the optimal fixed step for this class of problems is α* = 2/(λ_max(H) + λ_min(H)), with rate ((κ − 1)/(κ + 1)) per iteration where κ is the condition number of H. Ridge regularization shifts the spectrum by λ, improving κ and thus the convergence rate, although the strict upper bound 2/λ_max(H) may not increase. In our setting (degree-12 polynomial features, λ = 1e−4), the design is highly ill-conditioned, so the stable α range is very narrow and both OLS and Ridge diverge at α = 0.17. The trend toward higher R^2 at larger α reflects faster initial progress under a fixed iteration budget; once α exceeds the stability limit, the method diverges, yielding extremely poor R^2. In practice, feature scaling or orthogonal polynomial bases, stronger λ, or an α chosen via spectral estimates or backtracking line search make fixed-step gradient descent far more reliable.

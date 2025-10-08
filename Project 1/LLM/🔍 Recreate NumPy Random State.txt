@@ -1,0 +1,23 @@
+[Bruker]
+
+If I have saved a numpy random state using np.random.get_state, can I find the number to put into np.random.seed to recreate this state?
+
+
+[GPT]
+
+Short answer: No. You generally can’t recover a single integer seed that, when passed to np.random.seed, will recreate an arbitrary state returned by np.random.get_state.
+
+Why:
+- np.random.get_state returns the full internal state of the Mersenne Twister (624 32-bit words plus position and Gaussian cache flags). There are vastly more possible states than the 2^32 seeds accepted by np.random.seed, so most states are not reachable directly by seeding.
+- Seeding initializes a specific “canonical” initial state (and resets position and the Gaussian cache). An arbitrary saved state—especially one captured after some draws—won’t match that canonical post-seed state.
+
+What to do instead:
+- If you saved a state with np.random.get_state, restore it exactly with np.random.set_state(saved_state). That’s the reliable way to reproduce the sequence from that point.
+- If you need reproducibility via seed alone, record the seed at the start and ensure you make the same sequence of calls (and number of draws) before capturing or reproducing results.
+
+Example:
+state = np.random.get_state()
+# ... later ...
+np.random.set_state(state)
+
+For the newer Generator API (default_rng), use rng.bit_generator.state for saving/restoring, not a seed.

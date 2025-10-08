@@ -1,0 +1,24 @@
+[Bruker]
+
+Why does the variance of OLS regression decrease as we make the number of data points greater for the same degree polynomial
+
+
+[GPT]
+
+Short answer: With a fixed model (same polynomial degree), more data reduces the sampling variability of the OLS estimates, so the fitted curve fluctuates less from sample to sample. Formally, the variance of the OLS estimator shrinks roughly like 1/n as the number of data points n grows.
+
+Why this happens:
+- Setup: y = Xβ + ε, where ε has mean 0 and variance σ², and X is the design matrix built from your polynomial features [1, x, x², …, x^d].
+- OLS estimator: β̂ = (XᵀX)⁻¹ Xᵀy.
+- Variance of β̂ (conditional on X): Var(β̂) = σ² (XᵀX)⁻¹.
+- As you collect more data points, X gets more rows, and XᵀX becomes a larger, better-informed matrix. Under standard conditions (predictors are not degenerate and have finite moments), XᵀX grows proportionally to n, so (XᵀX)⁻¹ scales like 1/n.
+- Consequently, each coefficient’s variance scales like σ²/n (up to constants depending on the predictors), and the variance of predictions at any x*, Var(ŷ(x*)) = σ² x*ᵀ(XᵀX)⁻¹ x*, also shrinks like 1/n.
+
+Intuition:
+- Each coefficient in β̂ is a weighted average of noisy observations. Averages of independent noise have variance that decreases as 1/n, so the estimates become more stable.
+- With the polynomial degree fixed, you are not increasing model complexity; you’re only adding information. That reduces overfitting and the sample-to-sample wiggle of the fitted curve.
+
+Caveats and edge cases:
+- You need enough spread in x. If all x’s are very clustered or nearly collinear in feature space, XᵀX can be ill-conditioned, which inflates variance. More diverse data improves conditioning.
+- If errors are heteroskedastic or correlated, the simple σ²(XᵀX)⁻¹ expression changes, but the general “more data → lower variance” still holds under mild conditions.
+- If you increase the polynomial degree with n fixed, variance can increase; the statement here assumes the degree stays the same while n grows.

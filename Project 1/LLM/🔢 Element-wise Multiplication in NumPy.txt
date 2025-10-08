@@ -1,0 +1,40 @@
+[Bruker]
+
+How can I perform element-wise multiplication on numpy arrays? Suppose I have an array g, and I want to square each element, how do I do that?
+
+
+[GPT]
+
+Use NumPy’s vectorized operations. For element-wise multiplication of arrays, the operator * works element-wise. To square each element of g, you can use any of these:
+
+- g * g
+- g ** 2
+- np.square(g)
+- np.power(g, 2)
+
+Examples:
+- Squaring into a new array:
+  g = np.array([1, 2, 3])
+  squared = g ** 2          # [1, 4, 9]
+  # or squared = np.square(g)
+
+- In-place squaring (no extra allocation):
+  g **= 2
+  # or np.square(g, out=g)
+
+Element-wise multiplication of two arrays:
+  a = np.array([1, 2, 3])
+  b = np.array([4, 5, 6])
+  a * b                      # [4, 10, 18]
+
+Broadcasting also works:
+  A = np.arange(9).reshape(3, 3)
+  v = np.array([1, 10, 100])
+  A * v                      # each row multiplied by v element-wise
+
+Notes:
+- For matrix multiplication, use @ or np.matmul, not *.
+- Be mindful of dtype. Squaring large integers can overflow; use a larger or floating dtype if needed:
+  g = g.astype(np.int64)  # or np.float64
+- You can avoid temporary arrays by using the out parameter:
+  np.multiply(a, b, out=dest) or np.square(g, out=g).

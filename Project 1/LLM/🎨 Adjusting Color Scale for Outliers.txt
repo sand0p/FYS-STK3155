@@ -1,0 +1,63 @@
+[Bruker]
+
+I have some data I am using matplotlib imshow to plot, but it has some outliers that make the rest of the data all the same color. Is there some way to adjust the color scale to make it so that outliers dont make the rest of the data all the same color?
+
+
+[GPT]
+
+Yes. You can control how imshow maps data values to colors so that a few extreme values don’t flatten everything else. Here are common approaches, with short examples:
+
+1) Clip the color limits to percentiles (robust scaling)
+- Idea: ignore the top/bottom few percent when setting vmin/vmax.
+- Example:
+  import numpy as np
+  import matplotlib as plt
+
+  p2, p98 = np.percentile(data, [2, 98])
+  plt.imshow(data, vmin=p2, vmax=p98, cmap='viridis')
+  plt.colorbar()
+  plt.show()
+- Adjust the percentile cut (e.g., 1/99 or 5/95) to taste.
+
+2) Use a non-linear normalization (good for heavy-tailed data)
+- Log scale (only for strictly positive data):
+  from matplotlib import colors
+  plt.imshow(data, norm=colors.LogNorm(), cmap='viridis')
+  plt.colorbar()
+
+- Symmetric log for data with positives and negatives:
+  from matplotlib import colors
+  plt.imshow(data, norm=colors.SymLogNorm(linthresh=1.0), cmap='coolwarm')
+  plt.colorbar()
+  # linthresh controls the linear region around 0
+
+- Power law (gamma) to compress high values:
+  from matplotlib import colors
+  plt.imshow(data, norm=colors.PowerNorm(gamma=0.5), cmap='viridis')
+  plt.colorbar()
+
+- Centered/diverging around a key value (e.g., zero):
+  from matplotlib import colors
+  plt.imshow(data, norm=colors.TwoSlopeNorm(vcenter=0), cmap='coolwarm')
+  plt.colorbar()
+
+3) Explicitly set vmin/vmax (manual clipping)
+- If you know the meaningful data range:
+  plt.imshow(data, vmin=low, vmax=high, cmap='viridis')
+  plt.colorbar()
+
+4) Mask or mark true outliers
+- Hide values outside chosen bounds and color them separately:
+  import numpy as np
+  m = np.ma.masked_outside(data, p2, p98)
+  cmap = plt.get_cmap('viridis').copy()
+  cmap.set_bad(color='gray')
+  plt.imshow(m, cmap=cmap)
+  plt.colorbar()
+
+Notes:
+- By default, imshow uses the actual min/max as vmin/vmax, which is why outliers dominate. Setting vmin/vmax (or a norm) fixes this.
+- If you pass a norm, you typically don’t also pass vmin/vmax unless you’re deliberately constraining the norm’s range.
+- LogNorm requires data > 0. For data that includes zeros or negatives, use SymLogNorm.
+
+If you share a bit about your data’s range and whether it includes negatives or zeros, I can suggest the most appropriate normalization and parameters.
