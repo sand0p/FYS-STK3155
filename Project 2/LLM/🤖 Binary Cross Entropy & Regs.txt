@@ -1,0 +1,176 @@
+[Bruker]
+
+Could you state the expression for binary cross entropy with l1 regularization. And with l2 regularization? 
+As well as their derivatives?
+
+
+[GPT]
+
+Below are common definitions of the binary cross-entropy (log loss) with L1 and L2 regularization, along with their derivatives. I’ll assume a standard logistic model:
+- Logit: $z = w^\top x + b$
+- Probability: $p = \sigma(z) = \frac{1}{1 + e^{-z}}$
+- Label: $y \in \{0,1\}$
+
+Bias $b$ is typically not regularized. I will use the convention that the L2 term is $\frac{\lambda}{2}\lVert w\rVert_2^2$ (so its gradient is $\lambda w$), and the L1 term is $\lambda \lVert w\rVert_1$ (so its subgradient is $\lambda\,\mathrm{sign}(w)$).
+
+For clarity, I give both per-example and average-over-dataset forms.
+
+---
+
+## Binary cross-entropy (no regularization)
+
+Per example:
+```math
+\text{BCE}(p,y) = -\Big[y \log p + (1-y)\log(1-p)\Big].
+```
+
+Useful derivatives:
+```math
+\frac{\partial \text{BCE}}{\partial p} = -\frac{y}{p} + \frac{1-y}{1-p}, \quad
+\frac{\partial p}{\partial z} = p(1-p), \quad
+\Rightarrow \frac{\partial \text{BCE}}{\partial z} = p - y.
+```
+
+With $z = w^\top x + b$:
+```math
+\frac{\partial \text{BCE}}{\partial w} = (p - y)\,x, \qquad
+\frac{\partial \text{BCE}}{\partial b} = p - y.
+```
+
+---
+
+## With L1 regularization
+
+Per example (not typical, but shown for completeness):
+```math
+\mathcal{L}_{\text{L1}}(w,b; x,y) = \text{BCE}(p,y) \;+\; \lambda \lVert w\rVert_1.
+```
+
+Over a dataset $\{(x_i,y_i)\}_{i=1}^N$ with average loss:
+```math
+\mathcal{J}_{\text{L1}}(w,b) = \frac{1}{N}\sum_{i=1}^N \text{BCE}(p_i,y_i) \;+\; \lambda \lVert w\rVert_1,
+\quad p_i = \sigma(w^\top x_i + b).
+```
+
+Gradients/subgradients (per example; average is analogous with the $1/N$ factor):
+```math
+\frac{\partial \mathcal{L}_{\text{L1}}}{\partial z} = p - y,
+\qquad
+\frac{\partial \mathcal{L}_{\text{L1}}}{\partial w} = (p - y)\,x \;+\; \lambda\,\mathrm{sign}(w),
+\qquad
+\frac{\partial \mathcal{L}_{\text{L1}}}{\partial b} = p - y.
+```
+
+- Here $\mathrm{sign}(w)$ is applied elementwise. At $w_j = 0$, a subgradient can be any value in $[-\lambda,\lambda]$ (common choices are 0 or using proximal/soft-thresholding steps).
+- For the dataset average:
+```math
+\nabla_w \mathcal{J}_{\text{L1}} = \frac{1}{N}\sum_{i=1}^N (p_i - y_i)\,x_i \;+\; \lambda\,\mathrm{sign}(w), 
+\qquad
+\frac{\partial \mathcal{J}_{\text{L1}}}{\partial b} = \frac{1}{N}\sum_{i=1}^N (p_i - y_i).
+```
+
+---
+
+## With L2 regularization
+
+Per example:
+```math
+\mathcal{L}_{\text{L2}}(w,b; x,y) = \text{BCE}(p,y) \;+\; \frac{\lambda}{2}\lVert w\rVert_2^2.
+```
+
+Over a dataset with average loss:
+```math
+\mathcal{J}_{\text{L2}}(w,b) = \frac{1}{N}\sum_{i=1}^N \text{BCE}(p_i,y_i) \;+\; \frac{\lambda}{2}\lVert w\rVert_2^2,
+\quad p_i = \sigma(w^\top x_i + b).
+```
+
+Gradients (per example; average adds the $1/N$ factor to the data term):
+```math
+\frac{\partial \mathcal{L}_{\text{L2}}}{\partial z} = p - y,
+\qquad
+\frac{\partial \mathcal{L}_{\text{L2}}}{\partial w} = (p - y)\,x \;+\; \lambda\,w,
+\qquad
+\frac{\partial \mathcal{L}_{\text{L2}}}{\partial b} = p - y.
+```
+
+For the dataset average:
+```math
+\nabla_w \mathcal{J}_{\text{L2}} = \frac{1}{N}\sum_{i=1}^N (p_i - y_i)\,x_i \;+\; \lambda\,w, 
+\qquad
+\frac{\partial \mathcal{J}_{\text{L2}}}{\partial b} = \frac{1}{N}\sum_{i=1}^N (p_i - y_i).
+```
+
+---
+
+## Notes on conventions
+- Some libraries place the regularization inside the average (i.e., use $\lambda \lVert w\rVert$ vs. $\frac{\lambda}{N}\lVert w\rVert$). Adjust $\lambda$ accordingly.
+- Bias $b$ is typically not regularized.
+- If you need derivatives w.r.t. $p$ directly including regularization: L1/L2 regularization does not depend on $p$, so $\partial \mathcal{L}/\partial p$ is unchanged from the unregularized BCE.
+
+
+[Bruker]
+
+Is this only the case if we use a sigmoidal activation function?
+
+
+[GPT]
+
+Short answer: the neat simplification dL/dz = p − y is specific to pairing binary cross-entropy with the logistic-sigmoid (and, analogously, softmax with multiclass cross-entropy). With other output activations/links, you must apply the chain rule.
+
+Details:
+
+- Let $p = f(z)$ be your output activation (link), with $z = w^\top x + b$, and binary cross-entropy
+  ```math
+  \text{BCE}(p,y) = -\big[y \log p + (1-y)\log(1-p)\big].
+  ```
+  Then
+  ```math
+  \frac{\partial \text{BCE}}{\partial p} = -\frac{y}{p} + \frac{1-y}{1-p}
+  ```
+  and by chain rule
+  ```math
+  \frac{\partial \text{BCE}}{\partial z}
+  =
+  \left(-\frac{y}{p} + \frac{1-y}{1-p}\right) \, f'(z).
+  ```
+
+- When $f$ is the logistic-sigmoid, $f'(z) = p(1-p)$ and the factors cancel:
+  ```math
+  \frac{\partial \text{BCE}}{\partial z} = p - y.
+  ```
+  This is the special case that yields the simple gradient.
+
+- Other links give different factors:
+  - Probit link: $p = \Phi(z)$, $f'(z) = \phi(z)$. Then
+    ```math
+    \frac{\partial \text{BCE}}{\partial z}
+    =
+    \left(-\frac{y}{p} + \frac{1-y}{1-p}\right)\phi(z)
+    =
+    (p - y)\,\frac{\phi(z)}{p(1-p)}.
+    ```
+  - Tanh-based probability $p = \frac{1+\tanh z}{2}$ has $f'(z) = \frac{1-\tanh^2 z}{2} = 2p(1-p)$, so
+    ```math
+    \frac{\partial \text{BCE}}{\partial z} = 2\,(p - y).
+    ```
+  - Identity/clipped linear $p = z$ (constrained to $[0,1]$) gives
+    ```math
+    \frac{\partial \text{BCE}}{\partial z} = -\frac{y}{p} + \frac{1-y}{1-p}
+    ```
+    when inside the unclipped region.
+
+- Multiclass note: For softmax with cross-entropy, you also get the same kind of cancellation, yielding $\partial L/\partial z_k = p_k - y_k$ for each logit $z_k$.
+
+- Regularization: L1/L2 terms do not depend on the activation. Their gradients are unchanged:
+  - L1: add $\lambda\,\mathrm{sign}(w)$ (subgradient; elementwise) to $\partial L/\partial w$.
+  - L2: add $\lambda\,w$ to $\partial L/\partial w$.
+  Bias $b$ is typically not regularized.
+
+Summary:
+- The identity $\partial L/\partial z = p - y$ holds precisely when BCE is paired with the sigmoid (binary) or softmax (multiclass) link.
+- For any other activation $p=f(z)$, use
+  ```math
+  \frac{\partial L}{\partial z} =
+  \left(-\frac{y}{p} + \frac{1-y}{1-p}\right) f'(z),
+  ```
+  and keep the same L1/L2 regularization gradients on $w$.

@@ -1,0 +1,198 @@
+[Bruker]
+
+from util import *
+from autograd import elementwise_grad, jacobian
+import numpy as np
+
+def test_sigmoid():
+	z = np.random.randn(1000) * 100
+	own_sigmoid = sigmoid_der(z)
+
+	ag_sigmoid_der = elementwise_grad(sigmoid, 0)
+	ag_sigmoid = ag_sigmoid_der(z)
+
+	assert np.allclose(own_sigmoid, ag_sigmoid, rtol = 1e-5), "Sigmoid derivatives not equal"
+
+def test_ReLU():
+	z = np.random.randn(1000) * 100
+	own_ReLU = ReLU_der(z)
+
+	ag_ReLU_der = elementwise_grad(ReLU, 0)
+	ag_ReLU = ag_ReLU_der(z)
+
+	assert np.allclose(own_ReLU, ag_ReLU, rtol = 1e-5), "ReLU derivatives not equal"
+
+def test_leaky_ReLU():
+	z = np.random.randn(1000) * 100
+	own_leaky_ReLU = ReLU_der(z)
+
+	ag_leaky_ReLU_der = elementwise_grad(ReLU, 0)
+	ag_leaky_ReLU = ag_leaky_ReLU_der(z)
+
+	assert np.allclose(own_leaky_ReLU, ag_leaky_ReLU, rtol = 1e-5), "Leaky ReLU derivatives not equal"
+
+def test_MSE():
+	y_true = np.random.randn(1000)
+	y_pred = np.random.randn(1000)
+	own_mse = MSE_der(y_true, y_pred)
+
+	ag_mse = elementwise_grad(MSE, 0)
+	ag_mse_val = ag_mse(y_true, y_pred, [], lam = 0.01)
+	assert np.allclose(own_mse, ag_mse_val, rtol = 1e-5), "MSE derivatives not equal"
+
+def test_MSE_L1():
+	y_true = np.random.randn(1000)
+	y_pred = np.random.randn(1000)
+	own_mse_L1 = MSE_L1_der(y_true, y_pred)
+
+	ag_mse_L1 = elementwise_grad(MSE_L1, 0)
+	ag_mse_L1_val = ag_mse_L1(y_true, y_pred, [], lam = 0.01)
+
+	assert np.allclose(own_mse_L1, ag_mse_L1_val, rtol = 1e-5), "MSE L1 derivatives not equal"
+
+def test_MSE_L2():
+	y_true = np.random.randn(1000)
+	y_pred = np.random.randn(1000)
+	own_mse_L2 = MSE_L2_der(y_true, y_pred)
+
+	ag_mse_L2 = elementwise_grad(MSE_L2, 0)
+	ag_mse_L2_val = ag_mse_L2(y_true, y_pred, [], lam = 0.01)
+
+	assert np.allclose(own_mse_L2, ag_mse_L2_val, rtol = 1e-5), "MSE L2 derivatives not equal"
+
+def test_BCE():
+	targets = np.random.randint(0, 2, size = 1000)
+	inputs = np.random.rand(1000)
+	own_bce = bce_der(inputs, targets)
+
+	ag_bce = elementwise_grad(bce, 0)
+	ag_bce_val = ag_bce(inputs, targets, [], lam = 0.01)
+
+	assert np.allclose(own_bce, ag_bce_val, rtol = 1e-5), "BCE derivatives not equal"
+
+def test_softmax():
+	z = np.random.randn(1000) * 100
+	own_softmax = softmax_der(z)
+
+	ag_softmax_der = jacobian(softmax)
+	ag_softmax = np.diag(ag_softmax_der(z))
+	assert np.allclose(own_softmax, ag_softmax, rtol = 1e-5), "Softmax derivatives not equal"
+
+def test_cross_entropy_logits():
+	targets = np.random.randint(0, 2, size = 1000)
+	inputs = np.random.rand(1000)
+	own_ce_logits = cross_entropy_logits_der(inputs, targets)
+
+	ag_ce_logits = elementwise_grad(cross_entropy_logits)
+	ag_ce_logits_val = ag_ce_logits(inputs, targets, [], lam = 0.01)
+
+	assert np.allclose(own_ce_logits, ag_ce_logits_val, rtol = 1e-5), "Cross Entropy Logits derivatives not equal"
+
+Here are some test functions i have written. The last function does not work, could you give some suggestions to fix it?
+
+
+[GPT]
+
+Here are the most common reasons the last test fails, along with concrete fixes you can apply.
+
+Key issues to check:
+1) Use grad, not elementwise_grad, for scalar losses
+- cross_entropy_logits typically returns a scalar loss. autograd.elementwise_grad is meant for functions that map an array to an array of the same shape, differentiating elementwise. For scalar losses, you should use autograd.grad.
+
+Fix:
+```python
+from autograd import grad
+
+ag_ce_logits = grad(cross_entropy_logits, 0)  # gradient w.r.t. logits
+ag_ce_logits_val = ag_ce_logits(inputs, targets, [], lam=0.01)
+```
+
+2) Make sure you are passing logits, not probabilities
+- If the function is “cross_entropy_logits”, it expects logits (unbounded real values) as inputs. Your test uses np.random.rand(1000), which are probabilities in [0, 1]. Switch to np.random.randn(…) for logits.
+
+Fix:
+```python
+inputs = np.random.randn(1000)  # logits, not probabilities
+```
+
+3) Check that targets match the intended loss (binary vs. multi-class)
+- If cross_entropy_logits implements multi-class softmax cross-entropy, targets should be one-hot (with exactly one 1). Your current test creates a random binary vector with potentially many 1s, which is generally not a valid one-hot label vector.
+
+For multi-class:
+```python
+K = 10
+inputs = np.random.randn(K)            # logits for K classes
+targets = np.zeros(K)
+targets[np.random.randint(0, K)] = 1   # one-hot target
+```
+
+For binary (sigmoid) cross-entropy with logits (often called “BCE with logits”):
+```python
+inputs = np.random.randn(1000)                      # logits per example
+targets = np.random.randint(0, 2, size=1000)        # binary labels
+ag_ce_logits = grad(cross_entropy_logits, 0)
+ag_ce_logits_val = ag_ce_logits(inputs, targets, [], lam=0.01)
+```
+
+4) Make sure the function signature matches what you pass
+- In your earlier tests you pass extra arguments like [], lam=0.01. If cross_entropy_logits doesn’t accept those, autograd may fail or silently produce unexpected behavior. Either remove them or ensure the function supports them.
+
+Fix (if your function does not use params and lam):
+```python
+ag_ce_logits_val = ag_ce_logits(inputs, targets)
+```
+
+5) Verify your manual derivative matches the standard gradient
+- For softmax cross-entropy with one-hot target y and logits z, the gradient w.r.t. logits is:
+  $ \nabla_z \, \text{CE}(\text{softmax}(z), y) = \text{softmax}(z) - y $
+- For binary cross-entropy with logits z and labels y in {0,1}:
+  $ \nabla_z \, \text{BCEWithLogits}(z, y) = \sigma(z) - y $
+  where $ \sigma(z) $ is the sigmoid.
+
+If your cross_entropy_logits_der differs from the above, it will not match autograd.
+
+Putting it all together: example fixed tests
+
+A) Multi-class softmax cross-entropy case
+```python
+import numpy as np
+from autograd import grad
+
+def test_cross_entropy_logits_multiclass():
+    K = 10
+    z = np.random.randn(K)               # logits
+    y = np.zeros(K); y[np.random.randint(0, K)] = 1  # one-hot
+
+    own = cross_entropy_logits_der(z, y)
+
+    ag = grad(cross_entropy_logits, 0)   # gradient w.r.t logits
+    ag_val = ag(z, y)                    # adjust if your function expects extra args
+
+    assert np.allclose(own, ag_val, rtol=1e-5), "Cross Entropy Logits derivatives not equal (multiclass)"
+```
+
+B) Binary cross-entropy with logits case
+```python
+import numpy as np
+from autograd import grad
+
+def test_cross_entropy_logits_binary():
+    inputs = np.random.randn(1000)                   # logits
+    targets = np.random.randint(0, 2, size=1000)     # binary labels
+
+    own = cross_entropy_logits_der(inputs, targets)
+
+    ag = grad(cross_entropy_logits, 0)               # gradient w.r.t logits
+    ag_val = ag(inputs, targets)                     # remove extra args if not supported
+
+    assert np.allclose(own, ag_val, rtol=1e-5), "Cross Entropy Logits derivatives not equal (binary)"
+```
+
+Additional notes:
+- If your softmax derivative test uses only the diagonal of the Jacobian (s_i (1 - s_i)), remember the true Jacobian of softmax includes off-diagonal terms $-\;s_i s_j$. It’s fine if your softmax_der is defined as the elementwise derivative of each output w.r.t. its own input, but be aware of the distinction when comparing with jacobian(softmax).
+
+Summary of changes to make your current test_cross_entropy_logits pass:
+- Replace elementwise_grad with grad.
+- Use logits via np.random.randn instead of np.random.rand.
+- Ensure targets match the loss (one-hot for multi-class; 0/1 for binary).
+- Remove extraneous arguments if the function doesn’t expect them.

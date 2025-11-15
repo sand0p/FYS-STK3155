@@ -1,0 +1,93 @@
+[Bruker]
+
+Am I right in thinking that A @ B and A.dot(B) are the same operations where A and B are numpy arrays?
+
+
+[GPT]
+
+Short answer: sometimes. For NumPy ndarrays:
+
+- A @ B uses NumPy’s matrix multiplication rules (np.matmul).
+- A.dot(B) uses NumPy’s dot product rules (np.dot).
+
+They are the same for common cases (1-D vectors and 2-D matrices), but they differ for higher-dimensional arrays and scalars.
+
+Here’s the breakdown:
+
+- 1-D arrays (vectors): same — inner product.
+  ```python
+  import numpy as np
+  a = np.array([1,2,3])
+  b = np.array([4,5,6])
+  print(a @ b)       # 32
+  print(a.dot(b))    # 32
+  ```
+- 2-D arrays (matrices): same — standard matrix multiply.
+  ```python
+  A = np.array([[1,2],[3,4]])
+  B = np.array([[5,6],[7,8]])
+  print(A @ B)       # [[19,22],[43,50]]
+  print(A.dot(B))    # [[19,22],[43,50]]
+  ```
+
+- N-D arrays (3-D or more): different.
+  - A @ B behaves like np.matmul: treats the last two axes as matrices and broadcasts the leading axes.
+  - A.dot(B) behaves like np.dot: contracts the last axis of A with the second-to-last axis of B and preserves the other axes without broadcasting in the same way.
+
+  Example:
+  ```python
+  import numpy as np
+  A = np.random.randn(2, 3, 4)   # (..., M=3, K=4)
+  B = np.random.randn(2, 4, 5)   # (..., K=4, N=5)
+
+  print((A @ B).shape)        # (2, 3, 5)  -> matmul with broadcasting over leading dims
+  print(A.dot(B).shape)       # (2, 3, 2, 5) -> dot: a[:-1] + b[:-2] + b[-1]
+  ```
+
+- 0-D (scalars): different.
+  ```python
+  import numpy as np  a = np.array(3.0)
+  b = np.array(4.0)
+  # a @ b -> TypeError (no matmul for scalars)
+  print(np.dot(a, b))   # 12.0
+  ```
+
+Summary:
+- A @ B is equivalent to np.matmul(A, B).
+- A.dot(B) is equivalent to np.dot(A, B).
+- They match for 1-D and 2-D arrays, but differ for N-D arrays (broadcasting and axis-handling) and for scalars. If you want matrix multiplication with broadcasting over batch dimensions, prefer @ or np.matmul. If you want the “contract last axis of A with second-to-last of B” behavior, use .dot or np.dot. For arbitrary axis contractions, use np.tensordot.
+
+
+[Bruker]
+
+Is it true that matmul(A, B) is faster than using A @ B?
+
+
+[GPT]
+
+Short answer: No. For NumPy ndarrays, A @ B and np.matmul(A, B) are effectively the same operation and have the same performance.
+
+- The @ operator calls the ndarray’s special method __matmul__, which internally uses NumPy’s matmul implementation.
+- np.matmul(A, B) calls the same underlying C/BLAS routines.
+- Any difference you might see is negligible Python-level dispatch overhead and typically dwarfed by the actual matrix multiplication cost.
+
+Notes and caveats:
+- For array subclasses, both the operator (__matmul__) and the function (np.matmul with the __array_function__ protocol) can be overridden, so behavior/performance could differ depending on the subclass.
+- Performance is driven by factors like BLAS library (MKL/OpenBLAS/Accelerate), data types (float32 vs float64), memory layout (contiguous vs non-contiguous), shape, and whether broadcasting occurs—not by choosing @ vs np.matmul.
+
+Example timing (you’ll see near-identical timings):
+
+```python
+import numpy as np
+import timeit
+
+A = np.random.randn(2000, 2000)
+B = np.random.randn(2000, 2000)
+
+t_at = timeit.timeit('A @ B', globals=globals(), number=3)
+t_func = timeit.timeit('np.matmul(A, B)', globals=globals(), number=3)
+
+print(t_at, t_func)  # Expect very close numbers (differences are noise)
+```
+
+Bottom line: choose @ for readability; it’s not slower or faster than np.matmul for standard NumPy arrays.

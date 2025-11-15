@@ -1,0 +1,2081 @@
+[
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9800833333333333,
+        "test_acc": 0.9685,
+        "final_train_cost": 42.109656831715256,
+        "time_min": 0.8536466034833211,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9812666666666666,
+        "test_acc": 0.9656,
+        "final_train_cost": 34.89499568240717,
+        "time_min": 0.8357673743166439,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9741666666666666,
+        "test_acc": 0.9537,
+        "final_train_cost": 48.45291157439351,
+        "time_min": 0.837373870133312,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9559,
+        "test_acc": 0.952,
+        "final_train_cost": 93.20250939950347,
+        "time_min": 0.8114380284833108,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9819666666666667,
+        "test_acc": 0.9694,
+        "final_train_cost": 37.94237448554486,
+        "time_min": 0.8095287173500159,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9872166666666666,
+        "test_acc": 0.9701,
+        "final_train_cost": 26.102968686725944,
+        "time_min": 0.8172165117999914,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.97945,
+        "test_acc": 0.9669,
+        "final_train_cost": 42.90652429498732,
+        "time_min": 0.8415182076333318,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9866833333333334,
+        "test_acc": 0.9673,
+        "final_train_cost": 27.867384274257347,
+        "time_min": 0.8230822833333453,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9801666666666666,
+        "test_acc": 0.963,
+        "final_train_cost": 38.722129880450666,
+        "time_min": 0.8006875416666844,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9788666666666667,
+        "test_acc": 0.963,
+        "final_train_cost": 43.63203173875809,
+        "time_min": 0.8105711055499948,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9848833333333333,
+        "test_acc": 0.968,
+        "final_train_cost": 28.8552679377608,
+        "time_min": 0.8221398541666531,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9769666666666666,
+        "test_acc": 0.9617,
+        "final_train_cost": 44.317116795806214,
+        "time_min": 0.8180241764000129,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9544166666666667,
+        "test_acc": 0.9508,
+        "final_train_cost": 96.70245139300823,
+        "time_min": 0.8114013638833361,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9823,
+        "test_acc": 0.9679,
+        "final_train_cost": 38.66064237616956,
+        "time_min": 0.7853191013833566,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9833,
+        "test_acc": 0.9661,
+        "final_train_cost": 31.845959106925875,
+        "time_min": 0.7882312000000032,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9790333333333333,
+        "test_acc": 0.966,
+        "final_train_cost": 43.91078159585595,
+        "time_min": 0.797844481250013,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.98355,
+        "test_acc": 0.9648,
+        "final_train_cost": 32.402474514208734,
+        "time_min": 0.8385062222333242,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9701166666666666,
+        "test_acc": 0.9533,
+        "final_train_cost": 58.65639063809067,
+        "time_min": 0.8305895986166737,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.96415,
+        "test_acc": 0.9556,
+        "final_train_cost": 78.72675110213459,
+        "time_min": 0.8443742312500035,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9724666666666667,
+        "test_acc": 0.9552,
+        "final_train_cost": 59.12644825410098,
+        "time_min": 0.807888885416681,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9714666666666667,
+        "test_acc": 0.9542,
+        "final_train_cost": 54.133044458925724,
+        "time_min": 0.7955675534833062,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9167333333333333,
+        "test_acc": 0.9189,
+        "final_train_cost": 189.8356837630272,
+        "time_min": 0.7809809007000088,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9522833333333334,
+        "test_acc": 0.9462,
+        "final_train_cost": 103.66455844044685,
+        "time_min": 0.7814587888999995,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9639166666666666,
+        "test_acc": 0.9531,
+        "final_train_cost": 78.60519855469465,
+        "time_min": 0.780664389583338,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9659333333333333,
+        "test_acc": 0.9538,
+        "final_train_cost": 75.23545166477561,
+        "time_min": 0.7909991020833331,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9753,
+        "test_acc": 0.9583,
+        "final_train_cost": 54.99380703270435,
+        "time_min": 0.7947299187499993,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            30
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9704333333333334,
+        "test_acc": 0.9526,
+        "final_train_cost": 56.54911219794303,
+        "time_min": 0.7933472631999999,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9960833333333333,
+        "test_acc": 0.9778,
+        "final_train_cost": 10.315188099746592,
+        "time_min": 0.8193595305499912,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99705,
+        "test_acc": 0.9781,
+        "final_train_cost": 5.569725121196825,
+        "time_min": 0.8268016486166744,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9847833333333333,
+        "test_acc": 0.9639,
+        "final_train_cost": 34.98321063151161,
+        "time_min": 0.8134723916666796,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9642833333333334,
+        "test_acc": 0.9587,
+        "final_train_cost": 77.29290982149541,
+        "time_min": 0.7944460416666516,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9926333333333334,
+        "test_acc": 0.9787,
+        "final_train_cost": 18.72330467775464,
+        "time_min": 0.7867171069500122,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9981166666666667,
+        "test_acc": 0.9793,
+        "final_train_cost": 7.648052397184074,
+        "time_min": 0.7938102374999896,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9973333333333333,
+        "test_acc": 0.9773,
+        "final_train_cost": 7.8830024296185,
+        "time_min": 0.8127385222166897,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9974666666666666,
+        "test_acc": 0.9774,
+        "final_train_cost": 5.015285806992324,
+        "time_min": 0.8228916722333451,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9896333333333334,
+        "test_acc": 0.9711,
+        "final_train_cost": 22.011074824902607,
+        "time_min": 0.8262422319500122,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9973,
+        "test_acc": 0.9787,
+        "final_train_cost": 7.831819909624755,
+        "time_min": 0.8226199819333184,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9976333333333334,
+        "test_acc": 0.9776,
+        "final_train_cost": 5.439877066091867,
+        "time_min": 0.834096175683347,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.98485,
+        "test_acc": 0.9655,
+        "final_train_cost": 37.81037523288978,
+        "time_min": 0.8239147687500008,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9645166666666667,
+        "test_acc": 0.9593,
+        "final_train_cost": 76.04050227813423,
+        "time_min": 0.802399434033335,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9927,
+        "test_acc": 0.9774,
+        "final_train_cost": 18.741064614616334,
+        "time_min": 0.7816811951333269,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9975833333333334,
+        "test_acc": 0.9777,
+        "final_train_cost": 8.28326078178361,
+        "time_min": 0.7945898666666835,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9976833333333334,
+        "test_acc": 0.9777,
+        "final_train_cost": 6.943616586679127,
+        "time_min": 0.831465166666688,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99775,
+        "test_acc": 0.9778,
+        "final_train_cost": 4.978252010419965,
+        "time_min": 0.8149987923666534,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.98765,
+        "test_acc": 0.9681,
+        "final_train_cost": 23.125235546351178,
+        "time_min": 0.8187923124999846,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9883,
+        "test_acc": 0.973,
+        "final_train_cost": 30.47317327465862,
+        "time_min": 0.833955027083357,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9968333333333333,
+        "test_acc": 0.9745,
+        "final_train_cost": 12.877798402681947,
+        "time_min": 0.8367090992999996,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9853166666666666,
+        "test_acc": 0.9664,
+        "final_train_cost": 27.479265766218305,
+        "time_min": 0.8168226715333428,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9195166666666666,
+        "test_acc": 0.9233,
+        "final_train_cost": 170.03573390096426,
+        "time_min": 0.7972845451333341,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9623,
+        "test_acc": 0.9567,
+        "final_train_cost": 81.49757756665349,
+        "time_min": 0.7941545340333505,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9788666666666667,
+        "test_acc": 0.9678,
+        "final_train_cost": 50.449024276807904,
+        "time_min": 0.7990047479166605,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9901,
+        "test_acc": 0.9732,
+        "final_train_cost": 27.76262069027871,
+        "time_min": 0.8307982250000047,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99575,
+        "test_acc": 0.9744,
+        "final_train_cost": 13.914874808397144,
+        "time_min": 0.8126094861166773,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9856,
+        "test_acc": 0.9713,
+        "final_train_cost": 26.48994282539934,
+        "time_min": 0.8202085618166772,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99895,
+        "test_acc": 0.9795,
+        "final_train_cost": 3.76216505485354,
+        "time_min": 0.8622647666666429,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99775,
+        "test_acc": 0.9771,
+        "final_train_cost": 4.104286219702772,
+        "time_min": 0.8586962597333392,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9884666666666667,
+        "test_acc": 0.9716,
+        "final_train_cost": 26.911314954899353,
+        "time_min": 0.8665235742999964,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9679833333333333,
+        "test_acc": 0.9641,
+        "final_train_cost": 70.24175678007305,
+        "time_min": 0.8082375020833145,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9945333333333334,
+        "test_acc": 0.9805,
+        "final_train_cost": 15.686525891534984,
+        "time_min": 0.860233067366668,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9993333333333333,
+        "test_acc": 0.9814,
+        "final_train_cost": 5.2037538176518865,
+        "time_min": 0.8304164805500174,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99915,
+        "test_acc": 0.9815,
+        "final_train_cost": 2.5553942599653965,
+        "time_min": 0.9020743333333182,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9972666666666666,
+        "test_acc": 0.9799,
+        "final_train_cost": 4.617902639569365,
+        "time_min": 0.836651605566658,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9893666666666666,
+        "test_acc": 0.9723,
+        "final_train_cost": 29.27893239780746,
+        "time_min": 0.8254701555500106,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9973833333333333,
+        "test_acc": 0.9811,
+        "final_train_cost": 6.123370986897498,
+        "time_min": 0.8496136534666827,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99585,
+        "test_acc": 0.9793,
+        "final_train_cost": 7.490934888541233,
+        "time_min": 0.8462765874999908,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9883,
+        "test_acc": 0.9689,
+        "final_train_cost": 24.942405440648145,
+        "time_min": 0.8622880548666519,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.96865,
+        "test_acc": 0.9645,
+        "final_train_cost": 68.81800720468163,
+        "time_min": 0.8480215006833532,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9947666666666667,
+        "test_acc": 0.9788,
+        "final_train_cost": 15.589041364379227,
+        "time_min": 0.8251744388833383,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9991166666666667,
+        "test_acc": 0.9813,
+        "final_train_cost": 5.335843933513388,
+        "time_min": 0.8088124138999774,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9961166666666667,
+        "test_acc": 0.9779,
+        "final_train_cost": 7.222489283361938,
+        "time_min": 0.8400332958333213,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9983,
+        "test_acc": 0.9814,
+        "final_train_cost": 3.3757610910652147,
+        "time_min": 0.8499013354166588,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9889666666666667,
+        "test_acc": 0.9721,
+        "final_train_cost": 26.04219785073292,
+        "time_min": 0.8301482993000112,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9956833333333334,
+        "test_acc": 0.9763,
+        "final_train_cost": 15.686215951573104,
+        "time_min": 0.8528803611166647,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9991666666666666,
+        "test_acc": 0.9786,
+        "final_train_cost": 5.404510546126403,
+        "time_min": 0.8533886729166624,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9851333333333333,
+        "test_acc": 0.9686,
+        "final_train_cost": 26.227761447662488,
+        "time_min": 0.8446247659666672,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9188,
+        "test_acc": 0.9239,
+        "final_train_cost": 169.50969874858856,
+        "time_min": 0.8374230736166586,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.96215,
+        "test_acc": 0.9588,
+        "final_train_cost": 81.01952347904444,
+        "time_min": 0.816237371516642,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.97945,
+        "test_acc": 0.9714,
+        "final_train_cost": 46.60454101767391,
+        "time_min": 0.8140951888833418,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9971,
+        "test_acc": 0.9784,
+        "final_train_cost": 11.992924163118005,
+        "time_min": 0.8449102965333319,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9997,
+        "test_acc": 0.9801,
+        "final_train_cost": 3.3988338351482525,
+        "time_min": 0.8382571993166493,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9901166666666666,
+        "test_acc": 0.9774,
+        "final_train_cost": 17.8508028780343,
+        "time_min": 0.8333118159666507,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9955666666666667,
+        "test_acc": 0.9769,
+        "final_train_cost": 9.17292337451363,
+        "time_min": 0.8281685347166785,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9954333333333333,
+        "test_acc": 0.9791,
+        "final_train_cost": 8.20590046205325,
+        "time_min": 0.8408967631833548,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99005,
+        "test_acc": 0.9765,
+        "final_train_cost": 20.91921800801356,
+        "time_min": 0.8418134201499925,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9670833333333333,
+        "test_acc": 0.9606,
+        "final_train_cost": 71.21031045354903,
+        "time_min": 0.8097151312500197,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99575,
+        "test_acc": 0.9754,
+        "final_train_cost": 11.582786988234147,
+        "time_min": 0.8035073312499965,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9995833333333334,
+        "test_acc": 0.9814,
+        "final_train_cost": 2.539271592453588,
+        "time_min": 0.7988615840333295,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9974333333333333,
+        "test_acc": 0.9778,
+        "final_train_cost": 5.923985708039254,
+        "time_min": 0.8376085652833354,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99615,
+        "test_acc": 0.974,
+        "final_train_cost": 6.608333413823857,
+        "time_min": 0.8414096263833623,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99005,
+        "test_acc": 0.974,
+        "final_train_cost": 20.621857412916142,
+        "time_min": 0.835554438199991,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9921166666666666,
+        "test_acc": 0.9723,
+        "final_train_cost": 14.076790557126515,
+        "time_min": 0.856393284716675,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9960666666666667,
+        "test_acc": 0.9776,
+        "final_train_cost": 7.409484177682316,
+        "time_min": 0.8422346055500081,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9891333333333333,
+        "test_acc": 0.9732,
+        "final_train_cost": 20.862820845330134,
+        "time_min": 0.8524844583333107,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9682333333333333,
+        "test_acc": 0.9635,
+        "final_train_cost": 67.31579835899174,
+        "time_min": 0.8324463076333207,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9965833333333334,
+        "test_acc": 0.98,
+        "final_train_cost": 9.899347470724024,
+        "time_min": 0.8172345034666857,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9992833333333333,
+        "test_acc": 0.9782,
+        "final_train_cost": 3.1271672251459677,
+        "time_min": 0.8037339666666715,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9976666666666667,
+        "test_acc": 0.9791,
+        "final_train_cost": 5.571692292316584,
+        "time_min": 0.8312997520833354,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99725,
+        "test_acc": 0.9789,
+        "final_train_cost": 5.12110250700789,
+        "time_min": 0.8315770999999889,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9891333333333333,
+        "test_acc": 0.9729,
+        "final_train_cost": 23.79698168116738,
+        "time_min": 0.8561066243166654,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9941,
+        "test_acc": 0.974,
+        "final_train_cost": 17.713105625938624,
+        "time_min": 0.8650217319499764,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9973,
+        "test_acc": 0.9744,
+        "final_train_cost": 8.568042232189327,
+        "time_min": 0.9434319791666591,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9812833333333333,
+        "test_acc": 0.969,
+        "final_train_cost": 33.775726286228746,
+        "time_min": 0.8489381770833461,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.8705333333333334,
+        "test_acc": 0.8722,
+        "final_train_cost": 306.6590859591961,
+        "time_min": 0.8460300597166679,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9574333333333334,
+        "test_acc": 0.9526,
+        "final_train_cost": 93.3564261905849,
+        "time_min": 0.8387080597166763,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9792833333333333,
+        "test_acc": 0.9699,
+        "final_train_cost": 50.025071647018194,
+        "time_min": 0.8769845159666754,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99445,
+        "test_acc": 0.9738,
+        "final_train_cost": 16.775608757976443,
+        "time_min": 0.8735920104166629,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9984666666666666,
+        "test_acc": 0.9762,
+        "final_train_cost": 6.088161913212389,
+        "time_min": 0.8646890548666609,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            100,
+            50
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9862,
+        "test_acc": 0.9708,
+        "final_train_cost": 25.992126778000966,
+        "time_min": 0.9071369868166584,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9969166666666667,
+        "test_acc": 0.9787,
+        "final_train_cost": 5.532535165657464,
+        "time_min": 0.9648833333333339,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9971833333333333,
+        "test_acc": 0.9799,
+        "final_train_cost": 5.228877035871847,
+        "time_min": 1.00084188681667,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9831333333333333,
+        "test_acc": 0.9667,
+        "final_train_cost": 35.693244494264945,
+        "time_min": 0.9785910715166514,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.97085,
+        "test_acc": 0.9652,
+        "final_train_cost": 62.003702238202095,
+        "time_min": 0.8912294743166664,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9980833333333333,
+        "test_acc": 0.9799,
+        "final_train_cost": 7.301104325335473,
+        "time_min": 0.8621073069500198,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9997333333333334,
+        "test_acc": 0.982,
+        "final_train_cost": 1.7487179579911754,
+        "time_min": 0.864307783333364,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9982833333333333,
+        "test_acc": 0.9831,
+        "final_train_cost": 3.1459873468556907,
+        "time_min": 0.9379988125000334,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9982833333333333,
+        "test_acc": 0.9818,
+        "final_train_cost": 3.102728082656995,
+        "time_min": 0.9241603701332982,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "leaky_ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9789166666666667,
+        "test_acc": 0.966,
+        "final_train_cost": 59.299209815013455,
+        "time_min": 0.9069367117999718,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9987666666666667,
+        "test_acc": 0.9804,
+        "final_train_cost": 2.6273136326526583,
+        "time_min": 0.9393638916666532,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9961333333333333,
+        "test_acc": 0.9802,
+        "final_train_cost": 7.876831743629737,
+        "time_min": 0.9257859562500016,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9884833333333334,
+        "test_acc": 0.972,
+        "final_train_cost": 24.827939887094544,
+        "time_min": 0.9392517868166276,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9720166666666666,
+        "test_acc": 0.9644,
+        "final_train_cost": 59.693137305788696,
+        "time_min": 0.8619440833333404,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9977333333333334,
+        "test_acc": 0.9802,
+        "final_train_cost": 7.809647556277923,
+        "time_min": 0.8455320486166481,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9999,
+        "test_acc": 0.9818,
+        "final_train_cost": 1.8281011056678835,
+        "time_min": 0.8451783444500204,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.99845,
+        "test_acc": 0.9813,
+        "final_train_cost": 3.037654145497072,
+        "time_min": 0.8554629673666568,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9963,
+        "test_acc": 0.9794,
+        "final_train_cost": 6.708334032566199,
+        "time_min": 0.8700763805666915,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "ReLU",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9859666666666667,
+        "test_acc": 0.9701,
+        "final_train_cost": 29.441666923929006,
+        "time_min": 0.8554938111166848,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9988,
+        "test_acc": 0.977,
+        "final_train_cost": 5.09703187237028,
+        "time_min": 0.8826288465166726,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9986333333333334,
+        "test_acc": 0.9787,
+        "final_train_cost": 2.941107256017858,
+        "time_min": 0.87612034791667,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "ADAM",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.98435,
+        "test_acc": 0.9714,
+        "final_train_cost": 27.50714753032662,
+        "time_min": 0.9018981208332965,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.01,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.88585,
+        "test_acc": 0.8872,
+        "final_train_cost": 250.32876813411713,
+        "time_min": 0.8137287986167091,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.05,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9559333333333333,
+        "test_acc": 0.9528,
+        "final_train_cost": 93.77250523492694,
+        "time_min": 0.8238590625000143,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "SGD",
+        "lr": 0.1,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9788166666666667,
+        "test_acc": 0.9706,
+        "final_train_cost": 47.51003246381879,
+        "time_min": 0.8310972708333186,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.0005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9993166666666666,
+        "test_acc": 0.9796,
+        "final_train_cost": 3.241362446191488,
+        "time_min": 0.8738818333333256,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.001,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.999,
+        "test_acc": 0.9804,
+        "final_train_cost": 2.4616678807906283,
+        "time_min": 0.8709299166666824,
+        "status": "success"
+    },
+    {
+        "hidden_layers": [
+            200,
+            200
+        ],
+        "activation": "sigmoid",
+        "optimizer": "RMSProp",
+        "lr": 0.005,
+        "epochs": 15,
+        "minibatch_size": 100,
+        "train_acc": 0.9875666666666667,
+        "test_acc": 0.974,
+        "final_train_cost": 22.183775305806194,
+        "time_min": 0.904906116666704,
+        "status": "success"
+    }
+]

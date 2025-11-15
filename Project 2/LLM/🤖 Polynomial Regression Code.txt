@@ -1,0 +1,149 @@
+[Bruker]
+
+from util import *
+import numpy as np
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.model_selection import train_test_split
+
+def OLS(X:np.ndarray, y:np.ndarray)->np.ndarray:
+    return np.linalg.pinv(X.T @ X) @ X.T @ y
+
+# Data generation
+np.random.seed(2025)
+n_points = 50
+
+noise = 0.01 * np.random.randn(n_points,1)
+x = np.linspace(-1, 1, n_points).reshape(-1,1)
+y = Runge(x) + noise
+
+degree = 14
+X = PolynomialFeatures(degree).fit_transform(x)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+
+# Data scaling
+scaler = StandardScaler()
+scaler.fit(X_train)
+X_train_s = scaler.transform(X_train)
+X_test_s = scaler.transform(X_test)
+y_offset = np.mean(y_test)
+
+# Do a bit of a hack to work with the exact same data as the regression does :)
+x_train_s = X_train_s[:,1]
+x_test_s = X_test_s[:,1]
+
+# OLS regression
+beta_ols = OLS(X_train_s, y_train)
+y_pred_ols = X_test_s @ beta_ols + y_offset
+mse_ols = mean_squared_error(y_test, y_pred_ols)
+r2_ols = r2_score(y_test, y_pred_ols)
+print("OLS MSE",mse_ols)
+print("OLS R2",r2_ols)
+
+# 1 layer NN
+print("Training 1 layer NN")
+nn1 = NeuralNetwork(1, [50, 1], [sigmoid, plain], [sigmoid_der, plain_der], MSE, MSE_der)
+x_train_s = x_train_s.reshape(-1,1)
+y_train = y_train.reshape(-1,1)
+nn1.RMSProp_stochastic(x_train_s, y_train-y_offset, learning_rate = 0.01, rho = 0.99, epochs = 5000, minibatch_size = 5)
+nn1_pred = nn1.predict_batch(x_test_s.reshape(-1,1)) + y_offset
+mse_nn1 = mean_squared_error(y_test, nn1_pred)
+r2_nn1 = r2_score(y_test, nn1_pred)
+print("NN1 OLS", mse_nn1)
+print("NN1 R2",r2_nn1)
+
+# 2 layer NN
+print("Training 2 layer NN")
+nn2 = NeuralNetwork(1, [100, 100, 1], [sigmoid, sigmoid, plain], [sigmoid_der, sigmoid_der, plain_der], MSE, MSE_der)
+nn2.RMSProp_stochastic(x_train_s, y_train-y_offset, learning_rate = 0.01, rho = 0.99, epochs = 5000, minibatch_size=5)
+nn2_pred = nn2.predict_batch(x_test_s.reshape(-1,1)) + y_offset
+mse_nn2 = mean_squared_error(y_test, nn2_pred)
+r2_nn2 = r2_score(y_test, nn2_pred)
+print("NN2 MSE",mse_nn2)
+print("NN2 R2",r2_nn2)
+
+I have written this code that uses my own neural network implementation. Could you make it so that the last two paragraphs of code are implemented using pytorch instead, using the exact same setup, as I want to compare my code accuracy with that of Pytorch.
+
+
+[GPT]
+
+Here’s a drop-in PyTorch replacement for the two neural network blocks, matching your exact setup:
+- Input dimension: 1
+- Hidden layers: [50, 1] and [100, 100, 1]
+- Activations: sigmoid for hidden layers, linear (plain) for output
+- Loss: MSE
+- Optimizer: RMSprop with learning_rate=0.01, rho=0.99
+- Minibatch size: 5
+- Epochs: 5000
+- Train targets use y_train - y_offset, add y_offset back on predictions
+
+```python
+# --- PyTorch equivalents for the 1-layer and 2-layer NNs ---
+import torch
+from torch import nn
+from torch.utils.data import TensorDataset, DataLoader
+
+torch.manual_seed(2025)
+
+# Prepare tensors
+x_train_t = torch.tensor(x_train_s.reshape(-1, 1), dtype=torch.float32)
+y_train_t = torch.tensor((y_train - y_offset).reshape(-1, 1), dtype=torch.float32)
+x_test_t  = torch.tensor(x_test_s.reshape(-1, 1), dtype=torch.float32)
+
+# Common training utility
+def train_torch_model(model, x_t, y_t, epochs=5000, batch_size=5, lr=0.01, rho=0.99):
+    dataset = TensorDataset(x_t, y_t)
+    loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, drop_last=False)
+    criterion = nn.MSELoss()
+    optimizer = torch.optim.RMSprop(model.parameters(), lr=lr, alpha=rho, centered=False)
+
+    model.train()
+    for _ in range(epochs):
+        for xb, yb in loader:
+            optimizer.zero_grad()
+            preds = model(xb)
+            loss = criterion(preds, yb)
+            loss.backward()
+            optimizer.step()
+
+# 1-layer NN: [1] -> [50, sigmoid] -> [1, linear]
+print("Training 1 layer NN (PyTorch)")
+nn1_torch = nn.Sequential(
+    nn.Linear(1, 50),
+    nn.Sigmoid(),
+    nn.Linear(50, 1)
+)
+train_torch_model(nn1_torch, x_train_t, y_train_t, epochs=5000, batch_size=5, lr=0.01, rho=0.99)
+
+nn1_torch.eval()
+with torch.no_grad():
+    nn1_pred_t = nn1_torch(x_test_t).cpu().numpy() + y_offset
+mse_nn1_t = mean_squared_error(y_test, nn1_pred_t)
+r2_nn1_t = r2_score(y_test, nn1_pred_t)
+print("NN1 MSE (PyTorch)", mse_nn1_t)
+print("NN1 R2 (PyTorch)", r2_nn1_t)
+
+# 2-layer NN: [1] -> [100, sigmoid] -> [100, sigmoid] -> [1, linear]
+print("Training 2 layer NN (PyTorch)")
+nn2_torch = nn.Sequential(
+    nn.Linear(1, 100),
+    nn.Sigmoid(),
+    nn.Linear(100, 100),
+    nn.Sigmoid(),
+    nn.Linear(100, 1)
+)
+train_torch_model(nn2_torch, x_train_t, y_train_t, epochs=5000, batch_size=5, lr=0.01, rho=0.99)
+
+nn2_torch.eval()
+with torch.no_grad():
+    nn2_pred_t = nn2_torch(x_test_t).cpu().numpy() + y_offset
+mse_nn2_t = mean_squared_error(y_test, nn2_pred_t)
+r2_nn2_t = r2_score(y_test, nn2_pred_t)
+print("NN2 MSE (PyTorch)", mse_nn2_t)
+print("NN2 R2 (PyTorch)", r2_nn2_t)
+```
+
+Notes:
+- The optimizer uses alpha=rho=0.99 to match your RMSProp settings.
+- Targets are centered by y_offset during training, and predictions have y_offset added back, exactly like your code.
+- Batch size is 5 and epochs are 5000 to mirror your stochastic training procedure.

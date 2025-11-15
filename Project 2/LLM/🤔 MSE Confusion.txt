@@ -1,0 +1,17 @@
+[Bruker]
+
+When referring to the mean squared error as MSE, do you get a MSE or an MSE?
+
+
+[GPT]
+
+Use “an MSE.”
+
+- We use “an” before words that start with a vowel sound.
+- The initialism “MSE” is pronounced “em-ess-ee,” which starts with a vowel sound (“em”), so “an MSE” is correct.
+- If you say the full term, you’d use “a mean squared error.”
+
+Examples:
+- “We report an MSE of 0.12.”
+- “This model has a lower MSE.”
+- “We achieved a mean squared error of 0.12.”

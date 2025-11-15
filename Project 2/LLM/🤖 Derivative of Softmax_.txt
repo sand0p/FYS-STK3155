@@ -1,0 +1,217 @@
+[Bruker]
+
+def softmax(z):
+    e = np.exp(z - np.max(z, axis=-1, keepdims=True))
+    return e / np.sum(e, axis=-1, keepdims=True)
+
+Is there a way to take the derivative of this function using autograd? I tried to do it, but it seems like it does not work...
+
+
+[GPT]
+
+You can differentiate softmax with an automatic differentiation library, but plain NumPy won’t do it. If you’re using the HIPS “autograd” package, make sure you:
+
+- import autograd’s NumPy wrapper (autograd.numpy) instead of numpy
+- use autograd’s jacobian/grad helpers
+
+Below are working examples with Autograd, JAX, and PyTorch.
+
+---
+
+### Analytical derivative (for reference)
+
+For a vector $s = \text{softmax}(z)$, the Jacobian is:
+```math
+J_{ij} \;=\; \frac{\partial s_i}{\partial z_j}
+          \;=\; s_i \, (\delta_{ij} - s_j)
+```
+Equivalently, as a matrix: 
+```math
+J \;=\; \mathrm{diag}(s \;-\; s\,s^\top
+```
+
+---
+
+### Autograd (HIPS) example
+
+Install:
+```bash
+pip install autograd
+```
+
+Code:
+```python
+import autograd.numpy as np
+from autograd import jacobian
+
+def softmax(z):
+    # z: shape (d,) — a single vector
+    e = np.exp(z - np.max(z))
+    return e / np.sum(e)
+
+# Jacobian of softmax: R^d -> R^d
+softmax_jac = jacobian(softmax)
+
+z = np.array([1.0, 2.0, 3.0])
+J = softmax_jac(z)  # shape (d, d)
+print(J)
+```
+
+If you want to handle a batch `z` with shape `(batch, d)`, Autograd’s `jacobian` expects a function mapping one vector to one vector. You can loop over the batch or `vmap` manually:
+
+```python
+def softmax_vec(z):
+    e = np.exp(z - np.max(z))
+    return e / np.sum(e)
+
+softmax_jac = jacobian(softmax_vec)
+
+Z = np.array([[1.0, 2.0, 3.0],
+              [0.5, 0.1, -1.0]])
+
+Js = np.stack([softmax_jac(z) for z in Z], axis=0)  # shape (batch, d, d)
+```
+
+Notes:
+- Use `autograd.numpy` (not `numpy`) so operations are traceable.
+- `np.max` and `np.sum` with axes generally work in Autograd, but if you hit a limitation, simplify to 1D inputs (per-row) or avoid axis arguments.
+- The gradient of `max` is undefined at ties; AD will produce subgradients that may be numerically unstable there.
+
+---
+
+### JAX example (fast and robust)
+
+```python
+import jax
+import jax.numpy as jnp
+
+def softmax(z):
+    z = z - jnp.max(z, axis=-1, keepdims=True)
+    e = jnp.exp(z)
+    return e / jnp.sum(e, axis=-1, keepdims=True)
+
+# Jacobian for a single vector
+jac_single = jax.jacrev(lambda v: softmax(v))(jnp.array([1.,2.,3.]))
+
+# For a batch, vmap over rows
+def softmax_vec(v):
+    v = v - jnp.max(v)
+    e = jnp.exp(v)
+    return e / jnp.sum(e)
+
+jac_vec = jax.jacrev(softmax_vec)
+Z = jnp.array([[1.,2.,3.],[0.5,0.1,-1.]])
+Js = jax.vmap(jac_vec)(Z)  # (batch, d, d)
+```
+
+---
+
+### PyTorch example
+
+```python
+import torch
+
+def softmax(z):
+    # z: shape (d,)
+    e = torch.exp(z - torch.max(z))
+    return e / torch.sum(e)
+
+z = torch.tensor([1.0, 2.0, 3.0], requires_grad=True)
+s = softmax(z)
+
+# Full Jacobian via autograd.functional.jacobian
+J = torch.autograd.functional.jacobian(softmax, z)
+print(J)
+```
+
+For batches, you can wrap per-row and use `vmap` (PyTorch 2.0+):
+```python
+from torch import vmap
+
+def softmax_vec(v):
+    e = torch.exp(v - torch.max(v))
+    return e / torch.sum(e)
+
+jac = torch.func.jacrev(softmax_vec)  # PyTorch 2.x API
+Z = torch.tensor([[1.,2.,3.],[0.5,0.1,-1.]], requires_grad=True)
+Js = vmap(jac)(Z)  # (batch, d, d)
+```
+
+---
+
+### Common pitfalls
+
+- Using plain NumPy: it has no autograd; you must use autograd.numpy, JAX, or PyTorch.
+- In-place ops (e.g., `z -= ...`) can break autograd in some libraries.
+- Non-differentiability: `max` at ties; gradients may be ill-defined.
+- If you only need the Jacobian, the closed form above is often simpler and more efficient:
+```python
+import autograd.numpy as np
+
+def softmax(z):
+    e = np.exp(z - np.max(z))
+    return e / np.sum(e)
+
+def softmax_jac_closed(z):
+    s = softmax(z)
+    return np.diag(s) - np.outer(s, s)
+```
+
+
+[Bruker]
+
+If i use the jacobian from autograd, how can i extract the actual derivatives from it? I am comparing the autograd derivative to a function that returns softmax(z)*(1-softmax(z))
+
+
+[GPT]
+
+You’re getting a Jacobian because softmax is vector-valued: it maps a length-d vector z to a length-d vector s. The Jacobian J has shape (d, d), with entries $J_{ij} = \frac{\partial s_i}{\partial z_j}$.
+
+- The expression $s \cdot (1 - s)$ is the elementwise derivative of the sigmoid, not the full softmax Jacobian. For softmax, that expression matches only the diagonal of the Jacobian (i.e., $\frac{\partial s_i}{\partial z_i} = s_i(1 - s_i)$). 
+- The off-diagonal entries are nonzero and equal to $-\;s_i s_j$ for $i \neq j$.
+
+So if you want to “extract the actual derivatives” that correspond to your $s \cdot (1 - s)$ expression, take the diagonal of the Jacobian.
+
+Here’s how to do it and compare:
+
+```python
+import autograd.numpy as np
+from autograd import jacobian
+
+def softmax(z):
+    e = np.exp(z - np.max(z))
+    return e / np.sum(e)
+
+# Full Jacobian of softmax: R^d -> R^d
+softmax_jac = jacobian(softmax)
+
+z = np.array([1.0, 2.0, 3.0])
+s = softmax(z)
+J = softmax_jac(z)  # shape (d, d)
+
+# Extract the diagonal (∂s_i/∂z_i)
+diag_J = np.diag(J)
+
+# Compare to s * (1 - s)
+sig_like = s * (1 - s)
+
+print("softmax(z):", s)
+print("Jacobian diagonal:", diag_J)
+print("s * (1 - s):     ", sig_like)
+
+# Also show off-diagonals (should be -s_i * s_j)
+off_diagonals = J - np.diag(np.diag(J))
+print("Off-diagonals (should be -s_i*s_j):")
+print(off_diagonals)
+```
+
+If you want the complete, correct derivative structure for softmax, it’s:
+
+```math
+J_{ij} \;=\; s_i \, (\delta_{ij} - s_j)
+```
+
+- Diagonal: $J_{ii} = s_i(1 - s_i)$
+- Off-diagonal: $J_{ij} = -\,s_i s_j$ for $i \neq j$
+
+If you only compare `J` to `s * (1 - s)` directly, they won’t match because one is a matrix and the other is a vector; compare `diag(J)` to `s * (1 - s)` instead.

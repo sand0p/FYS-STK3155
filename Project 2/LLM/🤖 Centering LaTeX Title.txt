@@ -1,0 +1,61 @@
+[Bruker]
+
+I want the title to a latex paragraph to be centered and on its own line, but by default it does not work. I tried:
+\begin{center}
+\paragraph{L2 regularization}
+\end{center}
+but it seems to produce some errors. Is there a better way to fix this?
+
+
+[GPT]
+
+You’re running into a common LaTeX quirk: `\paragraph` is a “run-in” heading by default (the title appears inline with the following text), so wrapping it in a center environment won’t work and can even trigger errors.
+
+Here are clean ways to get a centered, on-its-own-line paragraph title.
+
+Option 1: Use titlesec to make paragraph headings block and centered
+```tex
+\usepackage{titlesec}
+
+% Make \paragraph a block heading and center it
+\titleformat{\paragraph}[block]
+  {\normalfont\normalsize\bfseries\centering}
+  {\theparagraph}{1em}{}
+
+% Optional: adjust vertical spacing (before/after)
+\titlespacing*{\paragraph}{0pt}{*2}{*0.5}
+
+% Then simply use:
+% \paragraph{L2 regularization}
+```
+
+Option 2: Redefine \paragraph without extra packages
+```tex
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+  {3.25ex \@plus 1ex \@minus .2ex}% space before
+  {1ex}% space after
+  {\normalfont\normalsize\bfseries\centering}}% style (centered)
+\makeatother
+
+% Then use:
+% \paragraph{L2 regularization}
+```
+
+Option 3: Use a higher-level heading that is already block-style
+If a block heading is acceptable (and you don’t specifically need the paragraph level):
+```tex
+\subsubsection*{L2 regularization}
+```
+- Add to the ToC (if desired): `\addcontentsline{toc}{subsubsection}{L2 regularization}`
+
+Option 4: Manual centered line (no numbering/ToC)
+```tex
+\begin{center}\bfseries L2 regularization\end{center}
+```
+This is fine for ad-hoc display headings but won’t be numbered or appear in the table of contents.
+
+Notes
+- Avoid putting sectioning commands like `\paragraph{...}` inside environments such as `center` or `itemize`; they are not designed to be nested that way and can produce errors.
+- If you need numbering for `\paragraph`, ensure `\setcounter{secnumdepth}{4}` is set; otherwise use the starred form `\paragraph*{...}` for unnumbered headings.
+- With KOMA-Script classes, you can also set `parskip=full, headings=normal` and then center via `\addtokomafont{paragraph}{\centering}`, but for standard classes `titlesec` is the most straightforward.

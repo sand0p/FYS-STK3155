@@ -1,0 +1,388 @@
+[Bruker]
+
+User uploaded file(s) with the following filenames and IDs: name: FYS_STK3155_Project_2-9.pdf (id: 19005)
+
+
+[Bruker]
+
+Could you check this report for any minor mistakes like spelling and grammas, as well as formatting, etc.
+
+
+[GPT]
+
+Here’s a detailed proofread and polish of your report, focusing on minor mistakes (spelling, grammar, formatting, consistency) and a few clarity/notation issues in formulas and algorithm descriptions. I’ve grouped suggestions by section and type, and included corrected wording and formulas where helpful.
+
+Note: I’m not changing your scientific claims or structure—this is about fixing small issues and tightening presentation. When I show formulas, I use LaTeX per your preference.
+
+---
+
+## Global style and consistency
+
+- Consistently use “Feed-Forward Neural Network (FFNN)” or “Feedforward Neural Network” throughout. Right now both appear; pick one and standardize.
+- Capitalization consistency:
+  - Use “PyTorch” (not “Pytorch”).
+  - Use “ADAM” or “Adam”—most papers use “Adam”; PyTorch docs use “Adam.” Pick one and keep it consistent.
+  - Use “RMSProp” (not “RMSprop”).
+  - Use “ReLU” (not “ReLu”).
+  - Use “LASSO” consistently if used (you also use “Lasso” once—choose one).
+  - Use “LaTeX” (not “LATEX”).
+- Apostrophes for possessives:
+  - “the network’s performance,” “the dataset’s simplicity,” “the network’s multiclass capabilities,” “the model’s accuracy.”
+- Numerals and separators:
+  - Use “70,000” instead of “70 000.”
+  - Use “10,000” instead of “10 000.”
+- Hyphenation:
+  - “one-dimensional,” “multi-class classification,” “softmax cross-entropy,” “single-threaded,” “closed-form,” “momentum-based,” “element-wise,” “mini-batch.”
+- Spacing and punctuation:
+  - Ensure space between words, e.g., “optimal fit” instead of “optimalfit.”
+  - Avoid stray hyphens at line breaks (“de-”).
+- Consistent notation:
+  - Use $n$ for number of samples, $K$ for number of classes consistently.
+  - Use $\hat{y}$ (ŷ) and $y$ consistently; avoid mixing with $f(x,\theta)$ unless necessary.
+  - Distinguish gradients with respect to predictions ($\partial C / \partial \hat{y}$), logits ($\partial C / \partial z$), and parameters ($\nabla_{W} C$).
+- Figures/tables:
+  - Ensure captions use consistent capitalization and naming (e.g., “ADAM” vs “ADA” typo).
+  - Cross-reference figures/tables consistently (e.g., “Figure 1,” “Table I”); consider using “Table 1” style to avoid Roman numerals in text-only contexts.
+- References formatting:
+  - Fix author names (e.g., “Y. LeCun”) and ensure consistent citation style (year, title, venue).
+  - Consider standard BibTeX style for IEEE/APA consistency (optional).
+
+---
+
+## Title and abstract
+
+- Current title: “Feed-Forward Neural Network implementation and optimization” → Consider capitalization:
+  - “Feed-Forward Neural Network Implementation and Optimization”
+- Abstract typos and style:
+  - “loss and evaluating accuracy.” → “loss, evaluating accuracy.”
+  - “top-end performance.” → fine, but consider “state-of-the-art performance for the chosen architectures” if you mean top within your setup.
+
+---
+
+## Introduction (Section I)
+
+- “allowing models to approximate complex functions that traditional methods struggle with, such as linear regression on certain functions.”
+  - Suggest: “allowing models to approximate complex functions that traditional methods (e.g., linear models) struggle with.”
+- “highdegree plynomials” → “high-degree polynomials”
+- “from-scratch” should be hyphenated.
+- “Runge function 1” → The “1” reads like a footnote. If you mean equation (1), write “Runge function (Equation 1).”
+- “optimizers.” should be followed by a space; then “In classification, the MNIST handwritten digits dataset featuring 70,000 grayscale images tests the network’s multiclass capabilities.”
+- “networks performance” → “network’s performance”
+- “Pytorch” → “PyTorch”
+- “the networks performance” → “the network’s performance”
+- “it de-” line break—fix to “it describes”
+- “can be found in the project repository.” → Provide a link or appendix reference if possible.
+
+---
+
+## Methods (Section II)
+
+### Data
+
+- “The Runge function in particular is much studied in the fied of regression” → “...is well studied in the field of regression...”
+- “The x-values in the training and testing data is given by n equally spaced points” → “...are given by $n$ equally spaced points...”
+
+### MNIST
+
+- “70 000” → “70,000”
+- “Due to the datasets simplicity” → “Due to the dataset’s simplicity”
+- “using neural network to classify the dataset is extensive.” → “using neural networks to classify MNIST is extensive.”
+- One-hot encoding:
+  - “The labels for each image is given” → “The labels for each image are given”
+  - “where the k-th element it set to 1.” → “where the $k$-th element is set to 1.”
+
+### Cost/loss functions
+
+- Mean Squared Error:
+  - The derivative line is split and duplicated; clarify. Suggested formulas:
+
+```math
+C_{\mathrm{MSE}}(\hat{y}) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+```
+
+```math
+\frac{\partial C_{\mathrm{MSE}}}{\partial \hat{y}_i}
+= -\frac{2}{n}(y_i - \hat{y}_i)
+= \frac{2}{n}(\hat{y}_i - y_i)
+```
+
+- “Addin regularization” → “Adding regularization”
+- L2 regularization (on MSE):
+
+```math
+C_{\mathrm{MSE}, L2} = C_{\mathrm{MSE}} + \lambda \lVert w \rVert_2^2
+```
+
+If you show $\nabla C$ “with respect to predictions,” do not add $2\lambda w$ there—$2\lambda w$ belongs to the gradient with respect to parameters. Consider splitting:
+  - Gradient w.r.t. predictions: unchanged.
+  - Gradient w.r.t. weights: add $2\lambda w$.
+
+- L1 regularization (on MSE):
+
+```math
+C_{\mathrm{MSE}, L1} = C_{\mathrm{MSE}} + \lambda \lVert w \rVert_1,
+\quad \nabla_w C = \nabla_w C_{\mathrm{MSE}} + \lambda\,\mathrm{sign}(w)
+```
+
+- Binary Cross-Entropy:
+  - Typo: “predicted predicted probability” → “predicted probability”
+  - BCE definition:
+
+```math
+C_{\mathrm{BCE}} = -\frac{1}{n} \sum_{i=1}^{n}\left[ y_i \log(\hat{y}_i) + (1 - y_i)\log(1 - \hat{y}_i)\right]
+```
+
+```math
+\frac{\partial C_{\mathrm{BCE}}}{\partial \hat{y}_i}
+= -\frac{1}{n}\left( \frac{y_i}{\hat{y}_i} - \frac{1 - y_i}{1 - \hat{y}_i} \right)
+```
+
+If $\hat{y}_i = \sigma(z_i)$ (sigmoid), then:
+
+```math
+\frac{\partial C_{\mathrm{BCE}}}{\partial z_i}
+= \frac{1}{n}(\hat{y}_i - y_i)
+```
+
+- Regularization with BCE:
+  - Keep $+2\lambda w$ only in parameter gradients (not in $\partial C/\partial \hat{y}$ or $\partial C/\partial z$).
+
+- Multiclass Cross-Entropy (softmax):
+  - Typos: “multicass” → “multiclass”
+  - Use consistent notation:
+
+```math
+\hat{y}_{ik} = \frac{e^{z_{ik}}}{\sum_{j=1}^{K} e^{z_{ij}}}, \quad
+C_{\mathrm{softmax}} = -\frac{1}{n} \sum_{i=1}^{n}\sum_{k=1}^{K} y_{ik}\,\log(\hat{y}_{ik})
+```
+
+```math
+\frac{\partial C_{\mathrm{softmax}}}{\partial z_{ik}}
+= \frac{1}{n}(\hat{y}_{ik} - y_{ik})
+```
+
+### Activation functions
+
+- ReLU: “piecewie” → “piecewise”
+- Leaky ReLU: Clarify $\alpha$ once (you do). Good.
+
+### Neural network methods
+
+- “A prediction is mate” → “A prediction is made”
+- “feed forward” → “feedforward”
+- Backprop/gradients section:
+  - Clarify vector/matrix shapes and use transposes accurately.
+  - You later mention outer product $\otimes$, but earlier write $\partial C/\partial W_i = \delta_i a_{i-1}$ without transpose; suggest:
+
+```math
+z_i = W_i a_{i-1} + b_i, \quad a_i = f_i(z_i)
+```
+
+```math
+\delta_n = \frac{\partial C}{\partial a_n} \odot f_n'(z_n),
+\quad
+\delta_i = (W_{i+1}^\top \delta_{i+1}) \odot f_i'(z_i)
+```
+
+```math
+\frac{\partial C}{\partial W_i} = \delta_i\, a_{i-1}^\top,
+\quad
+\frac{\partial C}{\partial b_i} = \delta_i
+```
+
+- Use $\odot$ for element-wise multiplication consistently.
+
+### Gradient descent methods
+
+- “Root Mean Square Propogation” → “Root Mean Square Propagation”
+- “For simpliciy” → “For simplicity”
+- RMSProp:
+  - Use $\epsilon$ instead of $\delta$ for numerical stability (common convention), and keep it consistent:
+
+```math
+r \leftarrow \rho r + (1 - \rho)\, g \odot g,
+\quad
+\Delta W = - \frac{\eta}{\sqrt{r} + \epsilon} \odot g
+```
+
+- ADAM:
+  - Typos: “acchieve” → “achieve”; “adition” → “addition”
+  - Bias correction and update:
+
+```math
+t \leftarrow t + 1\\
+s \leftarrow \rho_1 s + (1 - \rho_1) g\\
+r \leftarrow \rho_2 r + (1 - \rho_2) (g \odot g)\\
+\hat{s} \leftarrow \frac{s}{1 - \rho_1^t}, \quad
+\hat{r} \leftarrow \frac{r}{1 - \rho_2^t}\\
+\Delta W = - \eta \frac{\hat{s}}{\sqrt{\hat{r}} + \epsilon}
+```
+
+- Stochastic methods:
+  - “minibatches” → “mini-batches”
+  - “will by the central limit theorem” → “By the central limit theorem, repeated re-sampling improves the estimate of the underlying distribution.” (Or simply: “Shuffling and batching improve generalization.”)
+
+### Metrics
+
+- “ome metrics” → “some metrics”
+- Accuracy definition: clarify variables:
+  - Use $t_i$ for predicted labels and $y_i$ for true labels, or write plainly: “the proportion of correct predictions.”
+- $R^2$ formula has a critical typo. It currently reads with an extra “+”. Correct:
+
+```math
+\bar{y} = \frac{1}{n}\sum_{i=1}^n y_i
+```
+
+```math
+R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}
+```
+
+### Implementation
+
+- “Th correctness” → “The correctness”
+- “Pytorch” → “PyTorch”
+- “Due to the matrices being implemented as NumPy arrays and no parallelization being used, the performance of the code is extremely slow.” → Consider softening:
+  - “Because the implementation uses NumPy arrays without parallelization/GPU acceleration, training is relatively slow (e.g., up to 40 minutes for 15 epochs in large networks).”
+- Backprop line: “$ \delta_n = \nabla C \odot f_n'(z_n)$” is fine, but make it specific per loss (you do elsewhere).
+
+### Use of AI tools
+
+- “LATEXdebugging” → “LaTeX debugging”
+- “advnced” → “advanced”
+- Consider adding a short sentence on reproducibility (seed setting).
+
+---
+
+## Results and Discussion (Section III)
+
+### Regression
+
+- Table captions: Standardize capitalization and ensure table numbers match text references.
+- “optimalfit” → “optimal fit”
+- “simler” → “simpler”
+- “noticable” → “noticeable”
+- “functions” → “function” when referring to sigmoid vs ReLU singular.
+- “layes” → “layers”
+- “magnitude” section: okay.
+- Figure captions:
+  - “ADA optimizer” → “ADAM optimizer”
+- Clarify the surprising outcome:
+  - Add a sentence noting scaling of targets to [0,1] and possible alignment with sigmoid range (you already do—good).
+- Make sure you consistently state $n$, epochs, and batch sizes.
+- Regularization figures:
+  - “much moe consistient” → “much more consistent”
+  - “λ = 1, η = 0.05 L2 configuration” → consider formatting $\lambda$ and $\eta$ consistently as math.
+  - Where you compare to Ridge/LASSO, clarify whether those are linear models (they are) and state feature basis (e.g., polynomial basis degree) for fairness, if applicable.
+
+### MNIST classification
+
+- “minibatch size of 00” → “mini-batch size of 100”
+- “ADA optimizer” typo again → “ADAM”
+- “Somewhat interestingly the SGD outperforms” → “Interestingly, SGD outperforms...”
+- Figure captions and labels—ensure “ADAM” and “RMSProp” are spelled correctly in plots.
+- “heavy tail” wording is okay; consider “long tail” in accuracy distributions.
+- “leaky ReLU and the SGD is the most accurate” → “the leaky ReLU with SGD is the most accurate”
+- “1000 digits of each number” → “ideally, the test set would have exactly 1,000 instances per class”
+- Training time:
+  - “de to” → “due to”
+  - “somewhat infeasible” → “often impractical without GPU acceleration”
+- References:
+  - “[5] Y. Lcun” → “[5] Y. LeCun”
+- Confusion matrix:
+  - Good discussion; consider noting class imbalance only if true (MNIST test set is fairly balanced; check your split).
+
+---
+
+## Conclusion (Section IV)
+
+- “benifit” → “benefit”
+- “al” → “all”
+- “wether” → “whether”
+- “wethe r” also shows a line-break split earlier—ensure words don’t split mid-line.
+- “suggesting that it is a good general-purpose optimizer” → consistent with earlier MNIST results where SGD was best; you may want to nuance: Adam was best/stable for regression; SGD best in your MNIST sweep.
+- “which may have better results.” → “which may yield better results.”
+
+---
+
+## Specific corrections to formulas and lines
+
+- $R^2$ formula: fix as shown above.
+- Gradient expressions in regularization sections:
+  - Keep gradients w.r.t. predictions separate from gradients w.r.t. parameters. For example:
+
+```math
+\frac{\partial C_{\mathrm{MSE}}}{\partial \hat{y}} = \frac{2}{n}(\hat{y} - y),
+\quad
+\nabla_w C_{\mathrm{MSE}, L2} = \nabla_w C_{\mathrm{MSE}} + 2\lambda w,
+\quad
+\nabla_w C_{\mathrm{MSE}, L1} = \nabla_w C_{\mathrm{MSE}} + \lambda\,\mathrm{sign}(w)
+```
+
+- Backprop weight gradient:
+  - Use transpose and/or outer product notation consistently:
+
+```math
+\frac{\partial C}{\partial W_i} = \delta_i\, a_{i-1}^\top
+```
+
+- Softmax gradient: keep as shown (already correct).
+
+---
+
+## Typos and minor fixes (quick list)
+
+- plynomials → polynomials
+- fied → field
+- Pytorch → PyTorch
+- networks performance → network’s performance
+- networks multiclass capabilities → network’s multiclass capabilities
+- Addin → Adding
+- Propogation → Propagation
+- acchieve → achieve
+- adition → addition
+- simpliciy → simplicity
+- ome → some
+- piecewie → piecewise
+- mate → made
+- optimalfit → optimal fit
+- simler → simpler
+- noticable → noticeable
+- layes → layers
+- moe consistient → more consistent
+- advnced → advanced
+- LATEXdebugging → LaTeX debugging
+- Lcun → LeCun
+- ADA → ADAM (in captions)
+- 70 000 / 10 000 → 70,000 / 10,000
+- minibatch size of 00 → mini-batch size of 100
+- wether → whether
+- benifit → benefit
+- al → all
+- de → due
+- UiO GPT model note: fine; consider “GPT at UiO” or “UiO-hosted GPT.”
+
+---
+
+## Formatting suggestions
+
+- Equation numbering: You have (1), (2), etc. Ensure all referenced equations exist and numbering is sequential.
+- Use consistent math display for key formulas; avoid splitting the same derivative into multiple lines as with MSE earlier.
+- Tables:
+  - Standardize headings, e.g., “Model,” “MSE,” “$R^2$”
+  - Ensure significant figures are consistent across tables (e.g., 0.00038 vs 0.00018).
+- Figures:
+  - Ensure axis labels include units/definitions (e.g., learning rate $\eta$, MSE).
+  - Correct any mislabeled legends (e.g., ADAM vs ADA).
+
+---
+
+## Optional clarity improvements
+
+- When comparing against OLS/Ridge/LASSO, briefly state the feature basis (polynomial degree, regularization strength) so readers know the setup is fair.
+- State random seed use for reproducibility.
+- Mention data normalization/rescaling explicitly for regression targets (you mention MNIST normalization; for Runge, clarify if targets are in [0,1]).
+- In MNIST, note train/validation/test split approach (you mention train/test, but validation for tuning could be noted).
+
+---
+
+If you’d like, I can produce a clean, corrected version of specific sections (e.g., Methods and Metrics) with all formatting and formula fixes applied.

@@ -1,0 +1,55 @@
+[Bruker]
+
+Why are the stochastic versions of gradient descent methods often better? What quirk of statistics do they exploit? Is it regression to the mean / law of large numbers?
+
+
+[GPT]
+
+Short answer:
+They exploit the fact that the gradient of the empirical risk is an average, so a random mini‑batch gives an unbiased, low‑cost estimate of that gradient. The statistical “quirks” behind why this often works better are mainly the law of large numbers and the central limit theorem (unbiasedness and variance scaling), plus the beneficial effects of gradient noise (implicit regularization, escaping saddles, preference for flatter minima). It’s not really “regression to the mean.”
+
+Longer answer:
+
+- Empirical risk is an average, so mini‑batches give unbiased gradient estimates
+  - Let the objective be the empirical risk
+    ```math
+    f(w) \;=\; \frac{1}{n}\sum_{i=1}^n \ell\!\big(w;x_i\big), 
+    \quad \nabla f(w) \;=\; \frac{1}{n}\sum_{i=1}^n \nabla \ell\!\big(w;x_i\big).
+    ```
+    If you sample a mini‑batch $B$ uniformly (with or without replacement) and compute
+    ```math
+    \hat g_B(w) \;=\; \frac{1}{|B|}\sum_{i\in B} \nabla \ell\!\big(w;x_i\big),
+    ```
+    then
+    ```math
+    \mathbb{E}\!\big[\hat g_B(w)\big] \;=\; \nabla f(w),
+    ```
+    i.e., the mini‑batch gradient is an unbiased estimator of the full gradient.
+
+- Variance shrinks with batch size (law of large numbers / CLT)
+  - Under mild independence assumptions, the variance of $\hat g_B$ scales like
+    ```math
+    \operatorname{Var}\!\big(\hat g_B\big) \;\approx\; \frac{1}{|B|}\,\Sigma,
+    ```
+    so larger batches reduce noise. The law of large numbers guarantees convergence of the mini‑batch average to the full average as $|B|$ grows; the central limit theorem describes the distribution of the error (approximately Gaussian). This is the statistical foundation that makes stochastic approximations trustworthy.
+
+- Computational efficiency dominates
+  - A full gradient costs $O(n)$ per step, whereas a mini‑batch costs $O(|B|)\ll O(n)$. Even if each stochastic step is noisier, you can take many more steps per unit time, often yielding faster progress in wall‑clock time.
+
+- Noise helps optimization dynamics (escaping saddles/local traps)
+  - In high dimensions, nonconvex landscapes are littered with saddle points. The stochastic fluctuations in $\hat g_B$ act like injected noise that helps the iterates escape saddles and sharp, narrow minima that full‑batch gradient descent can get stuck near.
+
+- Implicit regularization and better generalization
+  - The noise in SGD biases the trajectory toward “flatter” minima (wide valleys where the loss doesn’t change rapidly), which often generalize better. This can be formalized by viewing SGD as a discretization of a Langevin‑type stochastic differential equation with an effective “temperature” that depends on step size and batch size. The stationary distribution has higher probability mass in flatter basins.
+
+- Diminishing returns of exactness
+  - You rarely need an exact gradient early in optimization; a cheap, noisy direction that’s on average correct is sufficient. As you approach a solution, you can reduce step size or increase batch size to tame variance (variance reduction), striking a better compute–accuracy tradeoff.
+
+- Variance‑reduced stochastic methods
+  - Algorithms like SVRG, SAGA, SARAH exploit the same unbiasedness but add control variates to reduce variance further, improving convergence rates while keeping per‑iteration cost low.
+
+What it is not:
+- Not regression to the mean in the classical sense. The advantage doesn’t come from outcomes “moving back” to an average across repetitions; it comes from unbiased subsampling with controllable variance and from the beneficial role of noise in nonconvex optimization.
+
+Key takeaway:
+Stochastic gradient methods are often better because they use unbiased, cheap gradient estimates whose variance can be controlled (LLN/CLT), and the resulting noise improves both optimization (escape from saddles) and generalization (implicit regularization toward flat minima), all while dramatically reducing per‑step computation.
