@@ -1,0 +1,116 @@
+[Bruker]
+
+I have a python file that is going to save a plot to a folder called Figures. If the file that produces this plot lies in a different folder, which both have the same parent folder, how do i make my plot land in the correct place?
+
+
+[GPT]
+
+If your script and the `Figures` folder are siblings (i.e., they share the same parent directory), build the save path relative to the script’s location rather than the current working directory. Use `pathlib` with `__file__` so it works no matter where you run the script from.
+
+Example layout:
+- Parent/
+  - src/           ← your script lives here
+  - Figures/       ← you want plots saved here
+
+Here’s a robust snippet:
+
+```python
+from pathlib import Path
+import matplotlib.pyplot as plt
+
+# Path to the folder containing this script
+SCRIPT_DIR = Path(__file__).resolve().parent
+
+# Parent directory of both the script folder and Figures
+PARENT_DIR = SCRIPT_DIR.parent
+
+# Path to the Figures folder (sibling of the script’s folder)
+FIGURES_DIR = PARENT_DIR / "Figures"
+FIGURES_DIR.mkdir(parents=True, exist_ok=True)  # create if missing
+
+# Example plot
+plt.plot([1, 2, 3], [4, 5, 6])
+plt.title("Example")
+
+# Save into Figures with an explicit filename
+outfile = FIGURES_DIR / "example_plot.png"
+plt.savefig(outfile, dpi=300, bbox_inches="tight")
+print(f"Saved plot to: {outfile}")
+```
+
+Notes:
+- Using `Path(__file__).resolve()` avoids issues where your current working directory differs from the script’s folder.
+- If your script is nested deeper (e.g., `Parent/app/util/script.py`), adjust how many `.parent` calls you need to reach the shared parent (e.g., `Path(__file__).resolve().parents[2]`).
+- In interactive environments (like Jupyter notebooks) `__file__` is not defined. In that case, either set `PARENT_DIR` manually or use `Path.cwd()` if you’ve `cd`’d into the project root:
+  ```python
+  from pathlib import Path
+  PARENT_DIR = Path.cwd()         # if you start the notebook in Parent/
+  FIGURES_DIR = PARENT_DIR / "Figures"
+  FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+  ```
+
+[Bruker]
+
+Can i do this manually somehow, not using pathlib?
+
+
+[GPT]
+
+Yes—use the standard library’s os.path and os.makedirs. Here’s a simple, portable way without pathlib.
+
+Scenario: your script is in a sibling folder to Figures:
+- Parent/
+  - src/           ← your script
+  - Figures/       ← destination
+
+Option 1: Resolve relative to the script’s file (robust)
+```python
+import os
+import matplotlib.pyplot as plt
+
+# Folder containing this script
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Parent of the script folder
+PARENT_DIR = os.path.dirname(SCRIPT_DIR)
+
+# Path to the Figures folder (sibling of script folder)
+FIGURES_DIR = os.path.join(PARENT_DIR, "Figures")
+
+# Create Figures folder if it doesn't exist
+os.makedirs(FIGURES_DIR, exist_ok=True)
+
+# Example plot
+plt.plot([1, 2, 3], [4, 5, 6])
+plt.title("Example")
+
+outfile = os.path.join(FIGURES_DIR, "example_plot.png")
+plt.savefig(outfile, dpi=300, bbox_inches="tight")
+print("Saved plot to:", outfile)
+```
+
+Notes:
+- os.path.abspath(__file__) gets the script’s absolute path.
+- os.path.dirname(...) moves up one directory level.
+- Adjust how many dirname calls you need if your script is nested deeper (e.g., use os.path.dirname(os.path.dirname(SCRIPT_DIR)) or a loop).
+
+Option 2: If running in an environment where __file__ is not defined (e.g., Jupyter)
+Start the session in the project’s parent directory (Parent/) or set it manually:
+```python
+import os
+
+# If your current working directory is Parent/
+PARENT_DIR = os.getcwd()  # or set explicitly: PARENT_DIR = "/path/to/Parent"
+
+FIGURES_DIR = os.path.join(PARENT_DIR, "Figures")
+os.makedirs(FIGURES_DIR, exist_ok=True)
+```
+
+Then save as usual:
+```python
+outfile = os.path.join(FIGURES_DIR, "example_plot.png")
+plt.savefig(outfile, dpi=300, bbox_inches="tight")
+```
+
+Tip:
+- Avoid hardcoding path separators like \ or /. Always use os.path.join for cross-platform compatibility.

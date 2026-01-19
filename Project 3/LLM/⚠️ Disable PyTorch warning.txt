@@ -1,0 +1,65 @@
+[Bruker]
+
+I get this deprecation warning from pytorch:
+/uio/hume/student-u00/sanderop/fysstk/P3/.venv/lib64/python3.12/site-packages/torchdata/datapipes/__init__.py:18: UserWarning: 
+################################################################################
+WARNING!
+The 'datapipes', 'dataloader2' modules are deprecated and will be removed in a
+future torchdata release! Please see https://github.com/pytorch/data/issues/1196
+to learn more and leave feedback.
+################################################################################
+
+  deprecation_warning()
+
+How can I disable it?
+
+
+[GPT]
+
+You can suppress that deprecation warning the same way you suppress any Python UserWarning: with the warnings module (programmatically) or with the PYTHONWARNINGS environment variable (process-wide). Pick the option that best fits your use case.
+
+1) Suppress programmatically (recommended — put this at the very top of your script / notebook before importing torch/torchdata)
+
+```py
+# Put this before importing torch or torchdata
+import warnings
+
+# Option A: ignore all UserWarning messages that mention "datapipes"
+warnings.filterwarnings(
+    "ignore",
+    category=UserWarning,
+    message=r".*datapipes.*deprecated.*",
+)
+
+# Option B: ignore warnings emitted from the torchdata.datapipes module
+warnings.filterwarnings(
+    "ignore",
+    category=UserWarning,
+    module=r"torchdata\.datapipes"
+)
+```
+
+Either pattern will stop the specific deprecation message while leaving other warnings intact.
+
+2) Suppress just for an import (temporary / localized)
+
+```py
+import warnings
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", category=UserWarning, message=r".*datapipes.*deprecated.*")
+    import torchdata  # or `from torchdata import datapipes`
+```
+
+3) Suppress globally using environment variable (works for scripts / shells)
+
+- In bash for a single command:
+  - PYTHONWARNINGS='ignore::UserWarning:torchdata.datapipes' python myscript.py
+- Or set for the process (or in your environment):
+  - export PYTHONWARNINGS='ignore::UserWarning:torchdata.datapipes'
+
+Notes and cautions
+- Suppressing warnings hides potentially important information about future breaking changes. Prefer filtering by a narrow message or module rather than ignoring all UserWarning messages.
+- If you want to be extra robust, match the exact text of the warning message (copy/paste the message into the regex) so you don’t accidentally hide other warnings.
+- If the package switches to logging instead of warnings in the future, you’d need to use the logging module to change its level.
+
+If you want, tell me whether you run in a script, a Jupyter notebook, or a long-lived service and I’ll suggest the minimal, safest place to add the suppression.

@@ -1,0 +1,69 @@
+[Bruker]
+
+I am using this code to tokenize some text:
+
+def tokenizer(text):
+    text = re.sub('<[^>]*>', '', text)
+    emoticons = re.findall('(?::|;|=)(?:-)?(?:\)|\(|D|P)', text.lower())
+    text = re.sub('[\W]+', ' ', text.lower()) +\
+        ' '.join(emoticons).replace('-', '')
+    tokenized = text.split()
+    return tokenized
+
+It produces these warning messages:
+<>:5: SyntaxWarning: invalid escape sequence '\)'
+<>:6: SyntaxWarning: invalid escape sequence '\W'
+<>:5: SyntaxWarning: invalid escape sequence '\)'
+<>:6: SyntaxWarning: invalid escape sequence '\W'
+/tmp/ipykernel_2293380/398689443.py:5: SyntaxWarning: invalid escape sequence '\)'
+  emoticons = re.findall('(?::|;|=)(?:-)?(?:\)|\(|D|P)', text.lower())
+/tmp/ipykernel_2293380/398689443.py:6: SyntaxWarning: invalid escape sequence '\W'
+  text = re.sub('[\W]+', ' ', text.lower()) +\
+
+How do i fix the warnings?
+
+
+[GPT]
+
+You’re seeing those warnings because in Python string literals, backslashes start escape sequences. In your regex patterns, `\)` and `\W` are intended for the regex engine, but Python tries to interpret them first and warns that they’re invalid escape sequences.
+
+The fix is to use raw string literals for your regex patterns (prefix with `r`), or double-escape the backslashes. Raw strings are cleaner.
+
+Here’s your function corrected with raw strings and a small improvement to ensure there’s a space between the cleaned text and the emoticons:
+
+```python
+import re
+
+def tokenizer(text):
+    # Use raw strings for regex patterns
+    text = re.sub(r'<[^>]*>', '', text)
+    emoticons = re.findall(r'(?::|;|=)(?:-)?(?:\)|\(|D|P)', text.lower())
+    # Ensure space between the cleaned text and the emoticons
+    text = re.sub(r'[\W]+', ' ', text.lower()).strip() + ' ' + ' '.join(emoticons).replace('-', '')
+    tokenized = text.split()
+    return tokenized
+```
+
+Alternative: If you prefer not to use raw strings, you can escape the backslashes:
+
+- `r'[\W]+'` becomes `'[\\W]+'`
+- `r'(?::|;|=)(?:-)?(?:\)|\(|D|P)'` becomes `'(?::|;|=)(?:-)?(?:\\)|\\(|D|P)'`
+
+For performance (if this runs a lot), precompile the regexes once:
+
+```python
+import re
+
+TAG_RE = re.compile(r'<[^>]*>')
+EMOTICON_RE = re.compile(r'(?::|;|=)(?:-)?(?:\)|\(|D|P)')
+NON_WORD_RE = re.compile(r'[\W]+')
+
+def tokenizer(text):
+    text = TAG_RE.sub('', text)
+    emoticons = EMOTICON_RE.findall(text.lower())
+    text = NON_WORD_RE.sub(' ', text.lower()).strip()
+    text = text + ' ' + ' '.join(emoticons).replace('-', '')
+    return text.split()
+```
+
+This will eliminate the `SyntaxWarning` messages and keep your regex behavior intact.

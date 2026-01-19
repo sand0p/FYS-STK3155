@@ -1,0 +1,106 @@
+[Bruker]
+
+I tried implementing a LSTM neural network, but when i run it i get this error:
+
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/./LSTM.py", line 25, in <module>
+    acc_train, loss_train = train(model, optimizer, loss_fn, train_dl, device)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/util.py", line 171, in train
+    pred = model(text_batch, lengths)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/.venv/lib64/python3.11/site-packages/torch/nn/modules/module.py", line 1532, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/.venv/lib64/python3.11/site-packages/torch/nn/modules/module.py", line 1541, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/util.py", line 248, in forward
+    out = hidden.squeeze(0)
+          ^^^^^^^^^^^^^^
+AttributeError: 'tuple' object has no attribute 'squeeze'
+
+For reference, this is my LSTM implementation:
+
+class LSTM(nn.Module):
+    def __init__(self, vocab_size, embed_dim, rnn_hidden_size, fc_hidden_size, num_classes=5):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=0)
+        self.rnn = nn.LSTM(embed_dim, rnn_hidden_size, batch_first=True)
+        self.fc1 = nn.Linear(rnn_hidden_size, fc_hidden_size)
+        self.relu = nn.ReLU()
+        self.output_activation = nn.Linear(fc_hidden_size, num_classes)
+    
+    def forward(self, text, lengths):
+        embedded = self.embedding(text)
+        out = nn.utils.rnn.pack_padded_sequence(embedded, lengths.cpu(), batch_first=True, enforce_sorted=False)
+        out, hidden = self.rnn(out)
+        out = hidden.squeeze(0)
+        out = self.fc1(out)
+        out = self.relu(out)
+        out = self.output_activation(out)
+        return out
+
+How to fix this?
+
+
+[GPT]
+
+The error happens because `nn.LSTM` returns two things:
+
+- The output sequence (packed, in your case).
+- A tuple `(h_n, c_n)` where:
+  - `h_n` is the final hidden state.
+  - `c_n` is the final cell state.
+
+You’re trying to call `.squeeze(0)` on the entire tuple, which causes the AttributeError. You need to unpack the tuple and use `h_n`.
+
+Also, it’s clearer to avoid reusing the variable name `out` for different purposes (packed sequence vs. hidden state). Here’s a corrected and slightly cleaned-up version:
+
+```python
+import torch
+import torch.nn as nn
+
+class LSTM(nn.Module):
+    def __init__(self, vocab_size, embed_dim, rnn_hidden_size, fc_hidden_size, num_classes=5):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=0)
+        self.rnn = nn.LSTM(embed_dim, rnn_hidden_size, batch_first=True)
+        self.fc1 = nn.Linear(rnn_hidden_size, fc_hidden_size)
+        self.relu = nn.ReLU()
+        self.output_activation = nn.Linear(fc_hidden_size, num_classes)
+    
+    def forward(self, text, lengths):
+        embedded = self.embedding(text)  # (batch, seq_len, embed_dim)
+        packed = nn.utils.rnn.pack_padded_sequence(
+            embedded, lengths.cpu(), batch_first=True, enforce_sorted=False
+        )
+        packed_output, (h_n, c_n) = self.rnn(packed)
+        # h_n shape: (num_layers * num_directions, batch, hidden_size)
+        # With a single layer, unidirectional LSTM, this is (1, batch, hidden_size)
+        out = h_n.squeeze(0)  # -> (batch, hidden_size)
+
+        out = self.fc1(out)
+        out = self.relu(out)
+        out = self.output_activation(out)
+        return out
+```
+
+Notes:
+
+- If you later set `bidirectional=True` or use multiple layers, `h_n` will have more slices. For classification in a bidirectional LSTM with one layer, you’d typically do:
+  ```python
+  # h_n shape: (2, batch, hidden_size) for bidirectional, 1 layer
+  out = torch.cat((h_n[-2], h_n[-1]), dim=1)  # (batch, 2 * hidden_size)
+  ```
+  and adjust `self.fc1`’s input size accordingly.
+
+- If you prefer using the last valid timestep output per sequence rather than the final hidden state, you need to unpack the sequence and index by `lengths - 1`:
+  ```python
+  output, _ = nn.utils.rnn.pad_packed_sequence(packed_output, batch_first=True)
+  # output: (batch, max_len, hidden_size)
+  idx = (lengths - 1).unsqueeze(1).unsqueeze(2).expand(-1, 1, output.size(2))  # gather indices
+  out = output.gather(1, idx).squeeze(1)  # (batch, hidden_size)
+  ```
+  Then proceed to the FC layers.
+
+Either approach works; using `h_n` is simpler when doing sequence-level classification.

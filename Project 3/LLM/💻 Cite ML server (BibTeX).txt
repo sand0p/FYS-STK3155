@@ -1,0 +1,54 @@
+[Bruker]
+
+I am using a ml server, and i want to cite it in a paper i am writing. On the website, it says:
+Citations and acknowledgements
+
+Please use the following format when acknowledging ML nodes, if you use them in your research.
+
+Machine learning infrastructure (ML Nodes), University Centre for Information Technology, University Of Oslo, Norway.
+
+Could you make a bibtex reference that follows the acknowledgement?
+
+
+[GPT]
+
+Here’s a ready-to-use BibTeX entry that follows the acknowledgement wording you provided. You can adjust the year (and add a URL if you have one):
+
+```bibtex
+@misc{uio-ml-nodes,
+  title        = {Machine learning infrastructure (ML Nodes)},
+  author       = {{University Centre for Information Technology, University Of Oslo}},
+  address      = {Oslo, Norway},
+  year         = {2025},
+  note         = {Acknowledgement: Machine learning infrastructure (ML Nodes), University Centre for Information Technology, University Of Oslo, Norway.}
+}
+```
+
+Optional (with URL and access date, if applicable—replace the placeholder):
+```bibtex
+@misc{uio-ml-nodes,
+  title        = {Machine learning infrastructure (ML Nodes)},
+  author       = {{University Centre for Information Technology, University Of Oslo}},
+  address      = {Oslo, Norway},
+  year         = {2025},
+  url          = {https://example.uio.no/ml-nodes}, 
+  urldate      = {2025-12-02},
+  note         = {Acknowledgement: Machine learning infrastructure (ML Nodes), University Centre for Information Technology, University Of Oslo, Norway.}
+}
+```
+
+If your bibliography style prefers “organization” over “author” for institutional entries, you can use:
+
+```bibtex
+@misc{uio-ml-nodes,
+  title         = {Machine learning infrastructure (ML Nodes)},
+  organization  = {University Centre for Information Technology, University Of Oslo},
+  address       = {Oslo, Norway},
+  year          = {2025},
+  note          = {Acknowledgement: Machine learning infrastructure (ML Nodes), University Centre for Information Technology, University Of Oslo, Norway.}
+}
+```
+
+Tip:
+- Keep the exact acknowledgement text in the note field (as above).
+- If your style requires it, you can switch “University Of Oslo” to “University of Oslo,” but I preserved your provided capitalization.

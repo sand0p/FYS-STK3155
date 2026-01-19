@@ -1,0 +1,59 @@
+[Bruker]
+
+I'm doing multiclass (1,2,3,4,5) classification with RNNs in pytorch, what activation function should i use for the final layer to allow for multiclass classification into the 5 classes?
+
+
+[GPT]
+
+Use a linear layer that outputs 5 logits and no activation during training, and pair it with CrossEntropyLoss.
+
+- Final layer: nn.Linear(hidden_size, 5)
+- Loss: nn.CrossEntropyLoss()
+
+Notes:
+- CrossEntropyLoss in PyTorch expects raw, unnormalized logits and internally applies LogSoftmax + NLLLoss. So do not put Softmax on the final layer when training with CrossEntropyLoss.
+- For inference (to get probabilities), apply Softmax over dim=-1 to the logits.
+- For class prediction, use argmax over the logits (or probabilities).
+
+Why not Sigmoid?
+- Sigmoid is for multi-label (independent) classification. Your task is single-label, multi-class (exactly one of 5), so Softmax/CrossEntropyLoss is the correct choice.
+
+Minimal example (sequence classification with RNN, taking the last time step’s output):
+
+```python
+import torch
+import torch.nn as nn
+
+class RNNClassifier(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers=1, num_classes=5):
+        super().__init__()
+        self.rnn = nn.GRU(input_size, hidden_size, num_layers=num_layers, batch_first=True)
+        self.fc = nn.Linear(hidden_size, num_classes)  # outputs 5 logits
+    
+    def forward(self, x, lengths=None):
+        # x: (batch, seq_len, input_size)
+        out, h_n = self.rnn(x)  # h_n: (num_layers, batch, hidden_size)
+        # Use last layer’s hidden state as sequence representation
+        h_last = h_n[-1]  # (batch, hidden_size)
+        logits = self.fc(h_last)  # (batch, 5)
+        return logits
+
+model = RNNClassifier(input_size=128, hidden_size=64, num_classes=5)
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+
+# Example batch
+x = torch.randn(32, 50, 128)        # (batch, seq_len, input_size)
+y = torch.randint(0, 5, (32,))      # class indices in {0,1,2,3,4}
+
+logits = model(x)                   # (32, 5), raw logits
+loss = criterion(logits, y)         # CrossEntropyLoss expects logits + class indices
+loss.backward()
+optimizer.step()
+
+# Inference
+probs = torch.softmax(logits, dim=-1)     # convert to probabilities if needed
+preds = torch.argmax(logits, dim=-1)      # predicted class indices
+```
+
+If you instead want token-level (per time step) labels, apply the linear layer to each time step and compute CrossEntropyLoss over the sequence dimension (handling padding with ignore_index and attention to shapes).

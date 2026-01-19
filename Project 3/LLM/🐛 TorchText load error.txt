@@ -1,0 +1,97 @@
+[Bruker]
+
+I am working on a HPC cluster, and i get this error message when trying to run some code:
+Traceback (most recent call last):
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/RNN.py", line 7, in <module>
+    train_dl, valid_dl, test_dl, voc = load_data(batch_size=2048)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/util.py", line 72, in load_data
+    training_dataset = AmazonReviewFull(split='train')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/.venv/lib64/python3.11/site-packages/torchtext/data/datasets_utils.py", line 193, in wrapper
+    return fn(root=new_root, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/.venv/lib64/python3.11/site-packages/torchtext/data/datasets_utils.py", line 155, in new_fn
+    result.append(fn(root, item, **kwargs))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/.venv/lib64/python3.11/site-packages/torchtext/datasets/amazonreviewfull.py", line 80, in AmazonReviewFull
+    from torchdata.datapipes.iter import FileOpener, GDriveReader, HttpReader, IterableWrapper  # noqa
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/.venv/lib64/python3.11/site-packages/torchdata/datapipes/__init__.py", line 11, in <module>
+    from . import iter, map, utils
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/.venv/lib64/python3.11/site-packages/torchdata/datapipes/iter/__init__.py", line 78, in <module>
+    from torchdata.datapipes.iter.util.bz2fileloader import Bz2FileLoaderIterDataPipe as Bz2FileLoader
+  File "/itf-fi-ml/home/sanderop/fysstk/P3/.venv/lib64/python3.11/site-packages/torchdata/datapipes/iter/util/bz2fileloader.py", line 7, in <module>
+    import bz2
+  File "/storage/software/Python/3.11.3-GCCcore-12.3.0/lib64/python3.11/bz2.py", line 17, in <module>
+    from _bz2 import BZ2Compressor, BZ2Decompressor
+ImportError: libbz2.so.1.0: cannot open shared object file: No such file or directory
+
+[GPT]
+
+It looks like your Python is trying to import the standard library module bz2, but the runtime system library libbz2 is not available on your HPC nodes. This is common on clusters when the bzip2 module/library isn’t loaded or isn’t on your library path.
+
+Here are a few ways to fix it, in order of “most HPC-friendly”:
+
+1) Load the cluster’s bzip2 module (recommended)
+- Check what modules exist:
+  - module spider bzip2
+  - module avail bzip2
+- Load it (name may be bzip2 or BZip2 and often has a version, e.g., 1.0.8):
+  - module load bzip2
+  - or: module load BZip2/1.0.8-GCCcore-12.3.0
+- After loading, start a fresh shell or reload your Python module/environment:
+  - module purge
+  - module load bzip2
+  - module load Python/3.11.3-GCCcore-12.3.0
+- Verify Python sees bz2:
+  - python -c "import bz2, sys; print('bz2 OK, Python:', sys.version)"
+
+If this works, add the module load line(s) to your job script before running your code.
+
+2) If bzip2 is installed but not on LD_LIBRARY_PATH
+- Find the library path:
+  - module show bzip2
+  - or locate libbz2.so: find /storage/software -name "libbz2.so*"
+- Export the path before running:
+  - export LD_LIBRARY_PATH=/path/to/bzip2/lib:$LD_LIBRARY_PATH
+- Test again:
+  - python -c "import bz2; print('bz2 OK')"
+
+3) Use a Conda environment (self-contained)
+- If you have micromamba/mamba/conda available:
+  - micromamba create -n p311-bz2 -c conda-forge python=3.11
+  - micromamba activate p311-bz2
+  - python -c "import bz2; print('bz2 OK')"
+- Install your project deps (torch, torchtext, torchdata) inside this env. Conda will include libbz2 automatically.
+
+4) Build local bzip2 and point Python to it (last resort, no modules/conda)
+- Build bzip2 in your home:
+  - wget https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
+  - tar xzf bzip2-1.0.8.tar.gz && cd bzip2-1.0.8
+  - make -f Makefile-libbz2_so
+  - make
+  - mkdir -p $HOME/.local/{bin,lib,include}
+  - cp libbz2.so.* $HOME/.local/lib/
+  - cp bzlib.h $HOME/.local/include/
+- Then:
+  - export LD_LIBRARY_PATH=$HOME/.local/lib:$LD_LIBRARY_PATH
+  - python -c "import bz2; print('bz2 OK')"
+
+Notes specific to your stack
+- Your Python path suggests an EasyBuild module: /storage/software/Python/3.11.3-GCCcore-12.3.0. These builds typically depend on a matching GCCcore and libraries like bzip2. Make sure you load the exact matching dependency stack (GCCcore, zlib, bzip2) before loading Python. Often the easiest way is:
+  - module purge
+  - module load Python/3.11.3-GCCcore-12.3.0
+  This usually auto-loads its dependencies. If not, consult module spider Python/3.11.3-GCCcore-12.3.0 to see required deps and load bzip2 accordingly.
+
+- Your virtualenv (.venv) doesn’t change system libs availability. It uses the same underlying Python interpreter; so fixing libbz2 at the module/system level is necessary unless you switch to a Conda env that bundles libs.
+
+After resolving libbz2
+- Re-run a quick check:
+  - python -c "import bz2; import torchtext, torchdata; print('bz2, torchtext, torchdata OK')"
+- Then rerun your script.
+
+If you share which module system your cluster uses and the output of:
+- module avail | grep -i bzip
+- module show Python/3.11.3-GCCcore-12.3.0
+I can give you exact module load commands to put in your job script.

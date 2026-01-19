@@ -1,0 +1,56 @@
+[Bruker]
+
+How can i change the ticks on a sns heatmap? It is currently the labels 0,1,2,3,4, and i want to shift it to 1,2,3,4,5 on both the x and y axis labels. How can I do that?
+
+
+[GPT]
+
+You can set custom tick labels either by passing them directly to sns.heatmap via xticklabels and yticklabels, or by modifying the Matplotlib Axes after plotting.
+
+Here are two simple approaches:
+
+Option 1: Pass labels to sns.heatmap
+```python
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+data = np.random.rand(5, 5)  # example 5x5 matrix
+
+sns.set(style="white")
+ax = sns.heatmap(
+    data,
+    xticklabels=np.arange(1, data.shape[1] + 1),
+    yticklabels=np.arange(1, data.shape[0] + 1)
+)
+plt.show()
+```
+
+Option 2: Set ticks and labels on the Axes
+```python
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+data = np.random.rand(5, 5)
+
+ax = sns.heatmap(data)
+
+# Ensure ticks exist at each cell
+ax.set_xticks(np.arange(data.shape[1]))
+ax.set_yticks(np.arange(data.shape[0]))
+
+# Set labels shifted by +1
+ax.set_xticklabels(np.arange(1, data.shape[1] + 1))
+ax.set_yticklabels(np.arange(1, data.shape[0] + 1))
+
+# Optional: improve readability
+ax.tick_params(axis='x', rotation=0)
+ax.tick_params(axis='y', rotation=0)
+
+plt.show()
+```
+
+Notes:
+- If your data is a pandas DataFrame, seaborn uses the DataFrame’s columns/index as labels. You can override them with xticklabels=... and yticklabels=..., or set xticklabels=False / yticklabels=False and then set custom labels on the Axes.
+- Make sure you set ticks at the integer positions (0 to n-1) before applying the custom labels.
